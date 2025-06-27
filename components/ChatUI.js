@@ -12,7 +12,6 @@ export default function ChatUI() {
     const newMessage = { id: Date.now(), role: 'user', text: input };
     setMessages(prev => [...prev, newMessage]);
     setInput('');
-    // Simulate bot response
     setTimeout(() => {
       setMessages(prev => [
         ...prev,
@@ -26,12 +25,20 @@ export default function ChatUI() {
   };
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const chatArea = bottomRef.current?.parentNode;
+    if (chatArea && chatArea.scrollHeight > chatArea.clientHeight) {
+      bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
   }, [messages]);
 
   return (
     <div style={styles.wrapper}>
-      <div style={styles.chatScrollArea}>
+      <div
+        style={{
+          ...styles.chatScrollArea,
+          overflowY: messages.length >= 4 ? 'auto' : 'hidden',
+        }}
+      >
         {messages.map(msg => (
           <div
             key={msg.id}
@@ -41,7 +48,9 @@ export default function ChatUI() {
             }}
           >
             {msg.text}
-            <div style={styles.timestamp}>{new Date(msg.id).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+            <div style={styles.timestamp}>
+              {new Date(msg.id).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            </div>
           </div>
         ))}
         <div ref={bottomRef} />
@@ -64,12 +73,12 @@ const styles = {
   wrapper: {
     display: 'flex',
     flexDirection: 'column',
-    flexGrow: 1,
-    height: '100%', // Parent should be 100dvh
+    height: '100dvh', // Full screen height
+    overflow: 'hidden',
+    backgroundColor: '#fff',
   },
   chatScrollArea: {
     flexGrow: 1,
-    overflowY: 'auto',
     padding: '16px',
     display: 'flex',
     flexDirection: 'column',
