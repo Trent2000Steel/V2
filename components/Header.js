@@ -1,32 +1,30 @@
 export default function Header() {
   return (
     <header style={styles.header}>
-      <div style={styles.logo}>MovingCo<span style={styles.trademark}>™</span></div>
-      <div style={styles.tagline}>Moving you can trust. People who care.</div>
+      <h1 style={styles.logo}>MovingCo™</h1>
+      <p style={styles.tagline}>Moving you can trust. People who care.</p>
     </header>
   );
 }
 
 const styles = {
   header: {
-    padding: '20px 0 10px',
+    backgroundColor: '#1e70ff', // Google Blue
+    padding: '24px 0 16px',
     textAlign: 'center',
-    borderBottom: '1px solid #eee',
-    backgroundColor: '#fff',
+    color: 'white',
+    borderBottom: '2px solid #e0e0e0'
   },
   logo: {
-    fontSize: '26px',
-    fontWeight: 'bold',
-    color: '#1e70ff',
-  },
-  trademark: {
-    fontSize: '14px',
-    verticalAlign: 'super',
-    marginLeft: '2px',
+    margin: 0,
+    fontSize: '2.2rem',
+    fontWeight: '700',
+    letterSpacing: '-0.5px'
   },
   tagline: {
-    fontSize: '14px',
-    color: '#666',
-    marginTop: '4px',
+    margin: 0,
+    fontSize: '1rem',
+    opacity: 0.9,
+    fontWeight: 400
   }
 };
