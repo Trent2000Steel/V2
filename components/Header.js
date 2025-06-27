@@ -1,32 +1,25 @@
 export default function Header() {
   return (
     <header style={styles.header}>
-      <h1 style={styles.logo}>MovingCo™</h1>
-      <p style={styles.tagline}>Moving you can trust. People who care.</p>
+      <img src="/Header.png" alt="MovingCo" style={styles.logo} />
     </header>
   );
 }
 
 const styles = {
   header: {
+    height: '56px', // Clean slim height like ChatGPT
     backgroundColor: '#ffffff',
-    padding: '20px 0 16px',
-    textAlign: 'center',
-    color: '#000000'
+    borderBottom: '1px solid #e0e0e0',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'sticky',
+    top: 0,
+    zIndex: 1000,
   },
   logo: {
-    margin: 0,
-    fontSize: '2.2rem',
-    fontWeight: '700',
-    fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
-    letterSpacing: '-0.5px',
-    color: '#000000'
+    maxHeight: '32px', // Keeps the logo tight
+    objectFit: 'contain',
   },
-  tagline: {
-    margin: 0,
-    fontSize: '1.1rem',
-    fontWeight: '400',
-    fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
-    color: '#444444'
-  }
 };
