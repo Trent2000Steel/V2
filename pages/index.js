@@ -16,9 +16,11 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div style={styles.container}>
+      <div style={styles.page}>
         <Header />
-        <ChatUI />
+        <div style={styles.chatContainer}>
+          <ChatUI />
+        </div>
         <Footer />
       </div>
     </>
@@ -26,11 +28,16 @@ export default function Home() {
 }
 
 const styles = {
-  container: {
+  page: {
     display: 'flex',
     flexDirection: 'column',
-    height: '100vh', // Full viewport height
-    justifyContent: 'space-between',
+    height: '100dvh',
     backgroundColor: '#fff',
+  },
+  chatContainer: {
+    flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'hidden',
   },
 };
