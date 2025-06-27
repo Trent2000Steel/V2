@@ -25,35 +25,29 @@ export default function ChatUI() {
   };
 
   useEffect(() => {
-    const chatArea = bottomRef.current?.parentNode;
-    if (chatArea && chatArea.scrollHeight > chatArea.clientHeight) {
-      bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
   return (
     <div style={styles.wrapper}>
-      <div
-        style={{
-          ...styles.chatScrollArea,
-          overflowY: messages.length >= 4 ? 'auto' : 'hidden',
-        }}
-      >
-        {messages.map(msg => (
-          <div
-            key={msg.id}
-            style={{
-              ...styles.messageBubble,
-              ...(msg.role === 'user' ? styles.userBubble : styles.assistantBubble),
-            }}
-          >
-            {msg.text}
-            <div style={styles.timestamp}>
-              {new Date(msg.id).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+      <div style={styles.scrollContainer}>
+        <div style={styles.chatScrollArea}>
+          {messages.map(msg => (
+            <div
+              key={msg.id}
+              style={{
+                ...styles.messageBubble,
+                ...(msg.role === 'user' ? styles.userBubble : styles.assistantBubble),
+              }}
+            >
+              {msg.text}
+              <div style={styles.timestamp}>
+                {new Date(msg.id).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              </div>
             </div>
-          </div>
-        ))}
-        <div ref={bottomRef} />
+          ))}
+          <div ref={bottomRef} />
+        </div>
       </div>
 
       <div style={styles.inputBar}>
@@ -73,12 +67,20 @@ const styles = {
   wrapper: {
     display: 'flex',
     flexDirection: 'column',
-    height: '100dvh', // Full screen height
-    overflow: 'hidden',
+    flexGrow: 1,
+    height: '100%',
     backgroundColor: '#fff',
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    overflow: 'hidden',
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: 0,
   },
   chatScrollArea: {
     flexGrow: 1,
+    overflowY: 'auto',
     padding: '16px',
     display: 'flex',
     flexDirection: 'column',
