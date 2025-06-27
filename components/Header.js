@@ -17,6 +17,7 @@ const styles = {
     position: 'sticky',
     top: 0,
     zIndex: 1000,
+    flexShrink: 0, // ✅ Prevent header from shrinking
   },
   logo: {
     fontSize: '20px',
@@ -24,5 +25,6 @@ const styles = {
     color: '#1e1e1e',
     margin: 0,
     fontFamily: 'sans-serif',
+    userSelect: 'none', // ✅ Prevent accidental highlight flicker
   },
 };
