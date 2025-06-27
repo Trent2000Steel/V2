@@ -31,13 +31,15 @@ const styles = {
   page: {
     display: 'flex',
     flexDirection: 'column',
-    height: '100dvh',
+    height: '100dvh',          // Full device height
     backgroundColor: '#fff',
+    overflow: 'hidden',        // Prevent scrolling the whole page
   },
   chatContainer: {
     flexGrow: 1,
     display: 'flex',
     flexDirection: 'column',
-    overflow: 'hidden',
+    overflow: 'hidden',        // Lock scroll to ChatUI
+    minHeight: 0,              // Allows child flex container to shrink properly on mobile
   },
 };
