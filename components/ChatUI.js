@@ -1,126 +1,122 @@
-// components/ChatUI.js
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function ChatUI() {
   const [messages, setMessages] = useState([
-    { role: 'assistant', content: 'Hi, I’m Max — your MoveSafe Concierge. Where would you like to start today?' }
+    { id: 1, role: 'assistant', text: "Welcome to MovingCo. Where are you moving from?" },
   ]);
   const [input, setInput] = useState('');
-  const messagesEndRef = useRef(null);
+  const bottomRef = useRef(null);
 
-  const sendMessage = async () => {
+  const handleSend = () => {
     if (!input.trim()) return;
-
-    const userMessage = { role: 'user', content: input };
-    setMessages(prev => [...prev, userMessage]);
+    const newMessage = { id: Date.now(), role: 'user', text: input };
+    setMessages(prev => [...prev, newMessage]);
     setInput('');
-
-    const res = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: [...messages, userMessage] }),
-    });
-
-    const data = await res.json();
-    const botReply = { role: 'assistant', content: data.reply };
-    setMessages(prev => [...prev, botReply]);
+    // Simulate bot response
+    setTimeout(() => {
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Date.now() + 1,
+          role: 'assistant',
+          text: "Got it. Where are you headed?",
+        },
+      ]);
+    }, 800);
   };
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
   return (
-    <div style={styles.container}>
-      <div style={styles.chatBox}>
-        {messages.map((msg, index) => (
+    <div style={styles.wrapper}>
+      <div style={styles.chatScrollArea}>
+        {messages.map(msg => (
           <div
-            key={index}
+            key={msg.id}
             style={{
-              ...styles.message,
-              alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start',
-              backgroundColor: msg.role === 'user' ? '#d2eaff' : '#f1f1f1',
+              ...styles.messageBubble,
+              ...(msg.role === 'user' ? styles.userBubble : styles.assistantBubble),
             }}
           >
-            <div>{msg.content}</div>
-            <div style={styles.timestamp}>
-              {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-            </div>
+            {msg.text}
+            <div style={styles.timestamp}>{new Date(msg.id).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
           </div>
         ))}
-        <div ref={messagesEndRef} />
+        <div ref={bottomRef} />
       </div>
-      <div style={styles.inputContainer}>
+
+      <div style={styles.inputBar}>
         <input
-          style={styles.input}
-          type="text"
-          placeholder="Type your message..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
+          placeholder="Type a message"
+          style={styles.input}
         />
-        <button style={styles.button} onClick={sendMessage}>Send</button>
+        <button onClick={handleSend} style={styles.sendBtn}>Send</button>
       </div>
     </div>
   );
 }
 
 const styles = {
-  container: {
+  wrapper: {
     display: 'flex',
     flexDirection: 'column',
-    height: '80vh',
-    width: '100%',
-    maxWidth: '600px',
-    margin: '0 auto',
-    backgroundColor: '#ffffff',
-    borderRadius: '8px',
-    boxShadow: '0 0 8px rgba(0,0,0,0.1)',
-    overflow: 'hidden',
+    flexGrow: 1,
+    height: '100%', // Parent should be 100dvh
   },
-  chatBox: {
-    flex: 1,
-    padding: '10px',
-    display: 'flex',
-    flexDirection: 'column',
+  chatScrollArea: {
+    flexGrow: 1,
     overflowY: 'auto',
+    padding: '16px',
+    display: 'flex',
+    flexDirection: 'column',
+    backgroundColor: '#f9f9f9',
   },
-  message: {
-    maxWidth: '80%',
+  inputBar: {
+    padding: '12px',
+    borderTop: '1px solid #ddd',
+    display: 'flex',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+  input: {
+    flexGrow: 1,
     padding: '10px',
-    borderRadius: '15px',
+    border: '1px solid #ccc',
+    borderRadius: '6px',
+    fontSize: '16px',
+    marginRight: '8px',
+  },
+  sendBtn: {
+    backgroundColor: '#1e70ff',
+    color: '#fff',
+    padding: '10px 16px',
+    border: 'none',
+    borderRadius: '6px',
+    fontWeight: 'bold',
+  },
+  messageBubble: {
+    maxWidth: '80%',
+    padding: '10px 14px',
+    borderRadius: '12px',
     marginBottom: '10px',
-    fontSize: '14px',
-    lineHeight: '1.4',
+    position: 'relative',
+  },
+  assistantBubble: {
+    backgroundColor: '#e6e6e6',
+    alignSelf: 'flex-start',
+  },
+  userBubble: {
+    backgroundColor: '#cce0ff',
+    alignSelf: 'flex-end',
   },
   timestamp: {
     fontSize: '10px',
+    color: '#666',
+    marginTop: '4px',
     textAlign: 'right',
-    marginTop: '5px',
-    color: '#888',
   },
-  inputContainer: {
-    display: 'flex',
-    padding: '10px',
-    borderTop: '1px solid #ddd',
-    backgroundColor: '#f9f9f9',
-  },
-  input: {
-    flex: 1,
-    padding: '10px',
-    border: '1px solid #ccc',
-    borderRadius: '20px',
-    fontSize: '16px', // ✅ FIX: prevent iOS zoom
-    outline: 'none',
-  },
-  button: {
-    marginLeft: '10px',
-    padding: '10px 16px',
-    backgroundColor: '#1e70ff',
-    color: 'white',
-    border: 'none',
-    borderRadius: '20px',
-    cursor: 'pointer',
-    fontSize: '16px', // ✅ FIX: prevent iOS zoom
-  }
 };
