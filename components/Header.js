@@ -1,14 +1,14 @@
 export default function Header() {
   return (
     <header style={styles.header}>
-      <img src="/Header.png" alt="MovingCo" style={styles.logo} />
+      <h1 style={styles.logo}>MovingCo</h1>
     </header>
   );
 }
 
 const styles = {
   header: {
-    height: '56px', // Clean slim height like ChatGPT
+    height: '56px',
     backgroundColor: '#ffffff',
     borderBottom: '1px solid #e0e0e0',
     display: 'flex',
@@ -19,7 +19,10 @@ const styles = {
     zIndex: 1000,
   },
   logo: {
-    maxHeight: '32px', // Keeps the logo tight
-    objectFit: 'contain',
+    fontSize: '20px',
+    fontWeight: '600',
+    color: '#1e1e1e',
+    margin: 0,
+    fontFamily: 'sans-serif',
   },
 };
