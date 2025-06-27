@@ -1,4 +1,3 @@
-
 // components/ChatUI.js
 import { useState, useEffect, useRef } from 'react';
 
@@ -44,7 +43,9 @@ export default function ChatUI() {
             }}
           >
             <div>{msg.content}</div>
-            <div style={styles.timestamp}>{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+            <div style={styles.timestamp}>
+              {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            </div>
           </div>
         ))}
         <div ref={messagesEndRef} />
@@ -109,7 +110,7 @@ const styles = {
     padding: '10px',
     border: '1px solid #ccc',
     borderRadius: '20px',
-    fontSize: '14px',
+    fontSize: '16px', // ✅ FIX: prevent iOS zoom
     outline: 'none',
   },
   button: {
@@ -120,5 +121,6 @@ const styles = {
     border: 'none',
     borderRadius: '20px',
     cursor: 'pointer',
+    fontSize: '16px', // ✅ FIX: prevent iOS zoom
   }
 };
