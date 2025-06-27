@@ -9,22 +9,24 @@ export default function Header() {
 
 const styles = {
   header: {
-    backgroundColor: '#1e70ff', // Google Blue
-    padding: '24px 0 16px',
+    backgroundColor: '#ffffff',
+    padding: '20px 0 16px',
     textAlign: 'center',
-    color: 'white',
-    borderBottom: '2px solid #e0e0e0'
+    color: '#000000'
   },
   logo: {
     margin: 0,
     fontSize: '2.2rem',
     fontWeight: '700',
-    letterSpacing: '-0.5px'
+    fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+    letterSpacing: '-0.5px',
+    color: '#000000'
   },
   tagline: {
     margin: 0,
-    fontSize: '1rem',
-    opacity: 0.9,
-    fontWeight: 400
+    fontSize: '1.1rem',
+    fontWeight: '400',
+    fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+    color: '#444444'
   }
 };
