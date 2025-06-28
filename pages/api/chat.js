@@ -36,25 +36,30 @@ Your mission:
 `;
 
 export default async function handler(req, res) {
-  const { messages } = req.body;
+  try {
+    const { messages } = req.body;
 
-  // Update memory with new user message
-  const lastUserMessage = messages[messages.length - 1];
-  updateMemory(lastUserMessage);
+    // Update memory with new user message
+    const lastUserMessage = messages[messages.length - 1];
+    updateMemory(lastUserMessage);
 
-  const memoryMessages = getMemory().messages;
+    const memoryMessages = getMemory().messages;
 
-  const response = await openai.createChatCompletion({
-    model: "gpt-4",
-    messages: [
-      { role: "system", content: systemPrompt },
-      ...memoryMessages
-    ],
-    temperature: 0.7
-  });
+    const response = await openai.createChatCompletion({
+      model: "gpt-4",
+      messages: [
+        { role: "system", content: systemPrompt },
+        ...memoryMessages
+      ],
+      temperature: 0.7
+    });
 
-  const reply = response.data.choices[0].message;
-  updateMemory(reply); // Save assistant reply to memory
+    const reply = response.data.choices[0].message;
+    updateMemory(reply); // Save assistant reply to memory
 
-  res.status(200).json({ reply: reply.content });
+    res.status(200).json({ reply: reply.content });
+  } catch (error) {
+    console.error('GPT ERROR:', error); // Shows up in Vercel logs
+    res.status(500).json({ error: 'GPT error', details: error.message });
+  }
 }
