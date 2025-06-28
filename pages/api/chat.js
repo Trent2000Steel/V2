@@ -1,11 +1,10 @@
 // pages/api/chat.js
-import { Configuration, OpenAIApi } from "openai";
-import { getMemory, updateMemory } from "../../utils/Memory";
+import OpenAI from 'openai';
+import { getMemory, updateMemory } from '../../utils/Memory';
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
 });
-const openai = new OpenAIApi(configuration);
 
 const systemPrompt = `
 You are Max — the AI representative for MovingCo, a long-distance moving coordination service founded by a military logistics expert who saw firsthand how painful and untrustworthy moving can be.
@@ -36,30 +35,29 @@ Your mission:
 `;
 
 export default async function handler(req, res) {
-  try {
-    const { messages } = req.body;
+  const { messages } = req.body;
 
-    // Update memory with new user message
+  try {
     const lastUserMessage = messages[messages.length - 1];
     updateMemory(lastUserMessage);
 
     const memoryMessages = getMemory().messages;
 
-    const response = await openai.createChatCompletion({
-      model: "gpt-4",
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-4',
       messages: [
-        { role: "system", content: systemPrompt },
-        ...memoryMessages
+        { role: 'system', content: systemPrompt },
+        ...memoryMessages,
       ],
-      temperature: 0.7
+      temperature: 0.7,
     });
 
-    const reply = response.data.choices[0].message;
-    updateMemory(reply); // Save assistant reply to memory
+    const reply = completion.choices[0]?.message;
+    updateMemory(reply);
 
     res.status(200).json({ reply: reply.content });
-  } catch (error) {
-    console.error('GPT ERROR:', error); // Shows up in Vercel logs
-    res.status(500).json({ error: 'GPT error', details: error.message });
+  } catch (err) {
+    console.error('OpenAI error:', err);
+    res.status(500).json({ error: 'Something went wrong. Please try again later.' });
   }
 }
