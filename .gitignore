@@ -1,0 +1,10 @@
+# Ignore environment variable files
+.env
+.env.local
+.env.*.local
+
+# System files
+.DS_Store
+node_modules/
+.next/
+out/
