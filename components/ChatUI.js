@@ -17,26 +17,41 @@ export default function ChatUI() {
     const newMessage = { id: Date.now(), role: 'user', text: input };
     setMessages(prev => [...prev, newMessage]);
     setInput('');
-    simulateBotResponse();
+    simulateBotResponse([...messages, newMessage]);
   };
 
   const handleOptionClick = (optionText) => {
     const userMessage = { id: Date.now(), role: 'user', text: optionText };
     setMessages(prev => [...prev, userMessage]);
-    simulateBotResponse();
+    simulateBotResponse([...messages, userMessage]);
   };
 
-  const simulateBotResponse = () => {
-    setTimeout(() => {
+  const simulateBotResponse = async (updatedMessages) => {
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: updatedMessages }),
+      });
+
+      const data = await response.json();
+      const reply = {
+        id: Date.now() + 1,
+        role: 'assistant',
+        text: data.reply,
+      };
+      setMessages(prev => [...prev, reply]);
+    } catch (err) {
+      console.error('GPT error:', err);
       setMessages(prev => [
         ...prev,
         {
           id: Date.now() + 1,
           role: 'assistant',
-          text: "Got it. Where are you moving from?",
+          text: "Sorry, something went wrong. Try again in a moment.",
         },
       ]);
-    }, 800);
+    }
   };
 
   useEffect(() => {
