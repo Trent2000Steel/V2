@@ -2,7 +2,12 @@ import { useEffect, useRef, useState } from 'react';
 
 export default function ChatUI() {
   const [messages, setMessages] = useState([
-    { id: 1, role: 'assistant', text: "Welcome to MovingCo. Where are you moving from?" },
+    {
+      id: 1,
+      role: 'assistant',
+      text: "I’m Max — your MovingCo AI trained to save you from a moving nightmare.\nWhat’s weighing on you most right now?",
+      options: ['Price', 'Damage', 'Timing', 'Just guide me'],
+    },
   ]);
   const [input, setInput] = useState('');
   const bottomRef = useRef(null);
@@ -12,13 +17,23 @@ export default function ChatUI() {
     const newMessage = { id: Date.now(), role: 'user', text: input };
     setMessages(prev => [...prev, newMessage]);
     setInput('');
+    simulateBotResponse();
+  };
+
+  const handleOptionClick = (optionText) => {
+    const userMessage = { id: Date.now(), role: 'user', text: optionText };
+    setMessages(prev => [...prev, userMessage]);
+    simulateBotResponse();
+  };
+
+  const simulateBotResponse = () => {
     setTimeout(() => {
       setMessages(prev => [
         ...prev,
         {
           id: Date.now() + 1,
           role: 'assistant',
-          text: "Got it. Where are you headed?",
+          text: "Got it. Where are you moving from?",
         },
       ]);
     }, 800);
@@ -32,15 +47,27 @@ export default function ChatUI() {
     <div style={styles.wrapper}>
       <div style={styles.scrollContainer}>
         <div style={styles.chatScrollArea}>
-          {messages.map(msg => (
-            <div
-              key={msg.id}
-              style={{
-                ...styles.messageBubble,
-                ...(msg.role === 'user' ? styles.userBubble : styles.assistantBubble),
-              }}
-            >
-              {msg.text}
+          {messages.map((msg) => (
+            <div key={msg.id} style={{
+              ...styles.messageBubble,
+              ...(msg.role === 'user' ? styles.userBubble : styles.assistantBubble),
+            }}>
+              {msg.text.split('\n').map((line, i) => (
+                <div key={i}>{line}</div>
+              ))}
+              {msg.options && (
+                <div style={styles.optionsContainer}>
+                  {msg.options.map((opt, idx) => (
+                    <button
+                      key={idx}
+                      style={styles.optionButton}
+                      onClick={() => handleOptionClick(opt)}
+                    >
+                      {opt}
+                    </button>
+                  ))}
+                </div>
+              )}
               <div style={styles.timestamp}>
                 {new Date(msg.id).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
               </div>
@@ -129,5 +156,20 @@ const styles = {
     color: '#666',
     marginTop: '4px',
     textAlign: 'right',
+  },
+  optionsContainer: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: '8px',
+    marginTop: '8px',
+  },
+  optionButton: {
+    backgroundColor: '#1e70ff',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '20px',
+    padding: '8px 14px',
+    fontSize: '14px',
+    cursor: 'pointer',
   },
 };
