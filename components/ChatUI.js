@@ -12,46 +12,50 @@ export default function ChatUI() {
   const [input, setInput] = useState('');
   const bottomRef = useRef(null);
 
-  const handleSend = () => {
-    if (!input.trim()) return;
-    const newMessage = { id: Date.now(), role: 'user', text: input };
-    setMessages(prev => [...prev, newMessage]);
-    setInput('');
-    simulateBotResponse([...messages, newMessage]);
-  };
-
-  const handleOptionClick = (optionText) => {
-    const userMessage = { id: Date.now(), role: 'user', text: optionText };
-    setMessages(prev => [...prev, userMessage]);
-    simulateBotResponse([...messages, userMessage]);
-  };
-
-  const simulateBotResponse = async (updatedMessages) => {
+  const sendMessageToAPI = async (allMessages) => {
     try {
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: updatedMessages }),
+        body: JSON.stringify({ messages: allMessages }),
       });
-
       const data = await response.json();
-      const reply = {
-        id: Date.now() + 1,
-        role: 'assistant',
-        text: data.reply,
-      };
-      setMessages(prev => [...prev, reply]);
-    } catch (err) {
-      console.error('GPT error:', err);
+
       setMessages(prev => [
         ...prev,
         {
-          id: Date.now() + 1,
+          id: Date.now(),
           role: 'assistant',
-          text: "Sorry, something went wrong. Try again in a moment.",
-        },
+          text: data.reply || "Sorry, something went wrong.",
+        }
+      ]);
+    } catch (error) {
+      console.error('API error:', error);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Date.now(),
+          role: 'assistant',
+          text: "Sorry, something went wrong. Try again later.",
+        }
       ]);
     }
+  };
+
+  const handleSend = () => {
+    if (!input.trim()) return;
+    const userMessage = { id: Date.now(), role: 'user', text: input };
+    const updatedMessages = [...messages, userMessage];
+    setMessages(updatedMessages);
+    setInput('');
+    sendMessageToAPI(updatedMessages.map(m => ({ role: m.role, content: m.text })));
+  };
+
+  const handleOptionClick = (optionText) => {
+    const userMessage = { id: Date.now(), role: 'user', text: optionText };
+    const updatedMessages = [...messages, userMessage];
+    setMessages(updatedMessages);
+    sendMessageToAPI(updatedMessages.map(m => ({ role: m.role, content: m.text })));
   };
 
   useEffect(() => {
