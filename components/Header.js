@@ -17,7 +17,7 @@ export default function Header() {
 
 const styles = {
   header: {
-    height: '64px',
+    height: '72px',
     backgroundColor: '#ffffff',
     borderBottom: '1px solid #e0e0e0',
     display: 'flex',
@@ -26,24 +26,28 @@ const styles = {
     position: 'sticky',
     top: 0,
     zIndex: 1000,
-    padding: '0 20px',
   },
   centerWrap: {
+    position: 'relative',
     flex: 1,
     display: 'flex',
     justifyContent: 'center',
   },
   logo: {
-    fontSize: '22px',
-    fontWeight: '600',
+    fontSize: '24px',
+    fontWeight: 800,
     color: '#1e1e1e',
     margin: 0,
     fontFamily: 'sans-serif',
     userSelect: 'none',
   },
   flag: {
-    height: '40px',
-    width: '40px',
+    position: 'absolute',
+    right: '20px',
+    top: '50%',
+    transform: 'translateY(-50%)',
+    height: '48px',
+    width: '48px',
     objectFit: 'contain',
   },
 };
