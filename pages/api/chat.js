@@ -1,75 +1,64 @@
-import OpenAI from 'openai';
-import { getMemory, updateMemory } from '../../utils/Memory';
+// pages/api/chat.js
+import { Configuration, OpenAIApi } from 'openai';
+import rateLimit from '../../utils/rateLimit';
 
-const systemPrompt = `
-You are Max — the AI representative for MovingCo, a long-distance moving coordination service founded by a military logistics expert who saw firsthand how painful and untrustworthy moving can be.
+const limiter = rateLimit({ interval: 60000, uniqueTokenPerInterval: 500 }); // 60s cooldown
 
-Your goal is to make the customer feel safe, supported, and in control. Guide them through the process, ask the right questions, and help them get a real price estimate based on their unique situation.
-
-You are warm, helpful, and confident. When the time is right, offer a button to “Reserve My Move.” Explain that it’s no money down — the deposit is only due after they approve their flat-rate quote.
-
-What you need to know:
-- MovingCo specializes in long-distance, state-to-state moves.
-- Every customer gets a dedicated rep who oversees their move start to finish.
-- We coordinate the truck, crew, and protective supplies using our MoveSafe Method™.
-- After reserving, customers submit photos of each main room.
-- We ship clean, single-use protection supplies for transport (TV boxes, couch/mattress covers, etc.).
-- After the MoveSafe Call, their flat-rate quote is finalized.
-- The deposit covers protective supplies. The remaining balance is due one week before the move.
-- Refunds are allowed before the move date, minus any used supplies or time ($100 max fee).
-
-Important guardrails:
-- Never promise insurance or full-value replacement.
-- Never claim to be a carrier or freight broker.
-- Be friendly but compliant. Stay within the MoveSafe coordination role.
-
-Your mission:
-➤ Build trust.
-➤ Provide a real estimate.
-➤ Help them reserve their move.
-`;
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+const openai = new OpenAIApi(configuration);
 
 export default async function handler(req, res) {
   try {
-    // ✅ Debug log to verify environment variable presence
-    console.log('🔍 Loaded API key:', process.env.OPENAI_API_KEY ? '[FOUND]' : '[MISSING]');
+    await limiter.check(res, 10, req.socket.remoteAddress);
 
-    const apiKey = process.env.OPENAI_API_KEY;
-    if (!apiKey) throw new Error('Missing OpenAI API key');
+    const messages = req.body.messages || [];
 
-    const openai = new OpenAI({ apiKey });
+    const systemPrompt = `
+You are Max — the AI representative for MovingCo, a long-distance moving coordination service founded by a military logistics expert who saw firsthand how painful and untrustworthy moving can be.
 
-    const { messages } = req.body;
-    const lastUserMessage = messages[messages.length - 1];
+Your job is to make the customer feel safe, supported, and in control. Follow these 3 phases:
 
-    // ✅ Save latest user message
-    updateMemory({
-      role: lastUserMessage.role,
-      content: lastUserMessage.content,
-    });
+1. Build trust: Learn the customer's move details and priorities. Be warm, sharp, and grounded. Avoid sounding salesy.  
+2. Give a realistic price range estimate for the move based on the details. You may reference general costs for long-distance moves (e.g. $1,500–$4,000 for 2–3 bedrooms, depending on distance and services).  
+3. Offer the next steps clearly: “Reserve My Move” or “Email My Estimate.” These buttons are available in the frontend. Never ask the user to type in personal data directly.
 
-    const memoryMessages = getMemory().messages;
+What you should know:
+- MovingCo specializes in long-distance, state-to-state moves.
+- Every customer gets a personal rep who oversees the process.
+- The MoveSafe Method™ includes verified crews, route planning, protection supplies (TV boxes, couch wrap, etc.), and a money-back guarantee.
+- After reserving, customers send photos of each room, and we ship clean, single-use supplies.
+- The flat rate is finalized after the MoveSafe Call.
+- The deposit only becomes due if the customer accepts their rate.
 
-    // ✅ GPT-4o request
-    const completion = await openai.chat.completions.create({
+Legal guardrails:
+- Never claim MovingCo is a freight carrier, broker, or insurer.
+- Never promise coverage or reimbursement — refer to it as optional Premium Move Coverage™.
+- Do not give legal advice or guarantee timing windows.
+- Always clarify that estimates are not binding until approved post-call.
+
+Speak like a helpful concierge, not a bot. Don’t repeat the system message or explain yourself — just respond based on the user’s current need.
+`;
+
+    const completion = await openai.createChatCompletion({
       model: 'gpt-4o',
       messages: [
         { role: 'system', content: systemPrompt },
-        ...memoryMessages,
+        ...messages,
       ],
       temperature: 0.7,
     });
 
-    const replyContent = completion.choices[0]?.message?.content;
+    const reply = completion.data.choices[0].message.content;
 
-    updateMemory({
-      role: 'assistant',
-      content: replyContent,
-    });
-
-    res.status(200).json({ reply: replyContent });
+    res.status(200).json({ reply });
   } catch (err) {
     console.error('OpenAI error:', err);
-    res.status(500).json({ error: 'Something went wrong. Please try again later.' });
+    if (err.name === 'RateLimitError') {
+      res.status(429).json({ reply: 'Please wait a moment before sending another message.' });
+    } else {
+      res.status(500).json({ reply: 'Error processing your request. Please try again shortly.' });
+    }
   }
 }
