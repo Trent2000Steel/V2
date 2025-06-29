@@ -1,4 +1,3 @@
-// /pages/api/chat.js
 import OpenAI from 'openai';
 import { getMemory, updateMemory } from '../../utils/Memory';
 
@@ -32,7 +31,7 @@ Your mission:
 
 export default async function handler(req, res) {
   try {
-    // ✅ Instantiate OpenAI client INSIDE the handler
+    // ✅ Load OpenAI safely inside the function
     const openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
     });
@@ -40,7 +39,7 @@ export default async function handler(req, res) {
     const { messages } = req.body;
     const lastUserMessage = messages[messages.length - 1];
 
-    // ✅ Update memory with latest user message
+    // ✅ Save last user message to memory
     updateMemory({
       role: lastUserMessage.role,
       content: lastUserMessage.content,
@@ -48,9 +47,9 @@ export default async function handler(req, res) {
 
     const memoryMessages = getMemory().messages;
 
-    // ✅ Create GPT-4 response
+    // ✅ GPT-4o (Turbo Omni)
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-4o',
       messages: [
         { role: 'system', content: systemPrompt },
         ...memoryMessages,
@@ -60,13 +59,13 @@ export default async function handler(req, res) {
 
     const replyContent = completion.choices[0]?.message?.content;
 
-    // ✅ Save assistant reply to memory
+    // ✅ Save assistant reply
     updateMemory({
       role: 'assistant',
       content: replyContent,
     });
 
-    // ✅ Respond to frontend
+    // ✅ Send back to frontend
     res.status(200).json({ reply: replyContent });
   } catch (err) {
     console.error('OpenAI error:', err);
