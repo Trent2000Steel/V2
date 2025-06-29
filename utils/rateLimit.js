@@ -1,9 +1,9 @@
-import LRU from 'lru-cache';
+import { LRUCache } from 'lru-cache';
 
 const rateLimit = (options) => {
-  const tokenCache = new LRU({
+  const tokenCache = new LRUCache({
     max: options.uniqueTokenPerInterval || 500,
-    ttl: options.interval || 60000, // TTL in ms
+    ttl: options.interval || 60000, // ms
   });
 
   return {
