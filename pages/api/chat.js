@@ -1,3 +1,4 @@
+// /pages/api/chat.js
 import OpenAI from 'openai';
 import { getMemory, updateMemory } from '../../utils/Memory';
 
@@ -39,6 +40,7 @@ export default async function handler(req, res) {
   try {
     const lastUserMessage = messages[messages.length - 1];
 
+    // Store the user's most recent message
     updateMemory({
       role: lastUserMessage.role,
       content: lastUserMessage.content,
@@ -46,6 +48,7 @@ export default async function handler(req, res) {
 
     const memoryMessages = getMemory().messages;
 
+    // OpenAI SDK v4 - correct GPT call
     const completion = await openai.chat.completions.create({
       model: 'gpt-4',
       messages: [
@@ -55,14 +58,17 @@ export default async function handler(req, res) {
       temperature: 0.7,
     });
 
-    const reply = completion.choices[0]?.message;
+    // ✅ Properly extract message content from SDK v4
+    const replyContent = completion.choices[0]?.message?.content;
 
+    // Store assistant response
     updateMemory({
-      role: reply.role,
-      content: reply.content,
+      role: 'assistant',
+      content: replyContent,
     });
 
-    res.status(200).json({ reply: reply.content });
+    // Send it back to the frontend
+    res.status(200).json({ reply: replyContent });
   } catch (err) {
     console.error('OpenAI error:', err);
     res.status(500).json({ error: 'Something went wrong. Please try again later.' });
