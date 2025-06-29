@@ -1,7 +1,9 @@
 export default function Header() {
   return (
     <header style={styles.header}>
-      <h1 style={styles.logo}>MovingCo</h1>
+      <div style={styles.centerWrap}>
+        <h1 style={styles.logo}>MovingCo</h1>
+      </div>
       <img src="/USA.png" alt="USA flag" style={styles.flag} />
     </header>
   );
@@ -14,12 +16,17 @@ const styles = {
     borderBottom: '1px solid #e0e0e0',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center', // center the content wrapper
     position: 'sticky',
     top: 0,
     zIndex: 1000,
     flexShrink: 0,
-    gap: '12px',
+    padding: '0 16px', // space for flag on the right
+  },
+  centerWrap: {
+    flex: 1,
+    display: 'flex',
+    justifyContent: 'center',
   },
   logo: {
     fontSize: '20px',
