@@ -1,4 +1,3 @@
-// pages/api/chat.js
 import OpenAI from 'openai';
 import { getMemory, updateMemory } from '../../utils/Memory';
 
@@ -39,7 +38,11 @@ export default async function handler(req, res) {
 
   try {
     const lastUserMessage = messages[messages.length - 1];
-    updateMemory(lastUserMessage);
+
+    updateMemory({
+      role: lastUserMessage.role,
+      content: lastUserMessage.content,
+    });
 
     const memoryMessages = getMemory().messages;
 
@@ -53,7 +56,11 @@ export default async function handler(req, res) {
     });
 
     const reply = completion.choices[0]?.message;
-    updateMemory(reply);
+
+    updateMemory({
+      role: reply.role,
+      content: reply.content,
+    });
 
     res.status(200).json({ reply: reply.content });
   } catch (err) {
