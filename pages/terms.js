@@ -1,43 +1,44 @@
-export default function Terms() {
+// pages/terms.js
+export default function TermsOfService() {
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>Terms of Service</h1>
 
-      <div style={styles.content}>
+      <div style={styles.text}>
         <p><strong>1. Introduction</strong><br />
-        By using MovingCo (“we,” “us,” or “our”), you agree to these Terms of Service. If you do not agree, do not use our site or services.</p>
+        By accessing or using the services provided by MovingCo (“we,” “us,” or “our”), you agree to be bound by these Terms of Service. If you do not agree with any part of these terms, please do not use our website or services.</p>
 
         <p><strong>2. What We Do</strong><br />
-        MovingCo coordinates long-distance moves through third-party vendors. We provide flat-rate quotes and help organize your move.</p>
+        MovingCo is a concierge platform that coordinates long-distance moves through a verified network of third-party vendors. We help you plan and organize your move with transparent flat-rate pricing and a dedicated concierge call.</p>
 
         <p><strong>3. What We Don’t Do</strong><br />
-        We are not a carrier, moving company, or freight broker. We do not transport goods or provide labor. All moving services are performed by independent third parties.</p>
+        We are not a motor carrier, common carrier, moving company, or freight broker. We do not operate moving trucks, provide physical labor, or transport goods. All moving services are performed by independent, third-party providers.</p>
 
         <p><strong>4. The MoveSafe Method™</strong><br />
-        After booking, we collect photos and inventory, conduct a MoveSafe Call, and submit your details for flat-rate approval. Quotes may change if the information is inaccurate or incomplete.</p>
+        Our process includes gathering your inventory and photos, conducting a MoveSafe Call, and submitting your details for flat-rate approval. All quotes are subject to change based on accuracy of the submitted information.</p>
 
         <p><strong>5. Your Responsibilities</strong><br />
-        You agree to provide accurate information and submit required photos within 48 hours. Delays or changes may affect your quote or scheduling.</p>
+        You agree to provide complete and accurate information. You must submit photos of your home and belongings within 48 hours of booking. Failure to do so may delay or alter your quote or service.</p>
 
         <p><strong>6. Payments & Refunds</strong><br />
-        Once your flat rate is approved, a deposit is due to begin coordination and ship supplies. This deposit may be partially refundable if canceled before coordination begins. Final payment is required 5 days prior to your move.</p>
+        After approving your flat-rate quote, a partial deposit is required to cover coordination and supply shipping. This deposit may be refundable if cancellation occurs under specified conditions. Remaining payments are due per the terms of each vendor. See our Refund Policy for full details.</p>
 
-        <p><strong>7. Payment Handling</strong><br />
-        You authorize MovingCo to collect your payment and forward it to the selected vendors. We do not guarantee the performance or availability of any vendor.</p>
+        <p><strong>7. Service Denial & Termination</strong><br />
+        We reserve the right to refuse or cancel service at our discretion, especially in cases of fraud, abuse, or misrepresentation.</p>
 
-        <p><strong>8. Cancellation</strong><br />
-        We may cancel or refuse service at any time for fraud, abuse, or misrepresentation. Customers may request cancellation in writing for consideration of a partial refund before coordination begins.</p>
+        <p><strong>8. Governing Law</strong><br />
+        These Terms are governed by the laws of the State of Texas. Any disputes shall be resolved within Texas jurisdiction unless otherwise agreed in writing.</p>
 
-        <p><strong>9. Legal</strong><br />
-        These Terms are governed by the laws of the State of Texas. Any disputes shall be resolved in Texas courts unless otherwise agreed.</p>
-
-        <p><strong>10. Contact</strong><br />
-        Questions? Email us at support@trustmovingco.com.</p>
+        <p><strong>9. Contact</strong><br />
+        For questions about these terms, email us at <a href="mailto:support@trustmovingco.com">support@trustmovingco.com</a>.</p>
       </div>
 
-      <div style={{ textAlign: 'center', marginTop: '40px' }}>
-        <a href="/" style={styles.backBtn}>⬅ Back to Chat</a>
-      </div>
+      <button
+        style={styles.button}
+        onClick={() => window.location.href = '/'}
+      >
+        Back to Chat
+      </button>
     </div>
   );
 }
@@ -49,24 +50,27 @@ const styles = {
     margin: '0 auto',
     fontFamily: 'Arial, sans-serif',
     lineHeight: '1.6',
-    color: '#333',
+    backgroundColor: '#fff',
   },
   title: {
     fontSize: '28px',
+    marginBottom: '24px',
     textAlign: 'center',
-    marginBottom: '32px',
   },
-  content: {
+  text: {
     fontSize: '16px',
   },
-  backBtn: {
-    display: 'inline-block',
-    marginTop: '20px',
+  button: {
+    marginTop: '40px',
+    padding: '12px 20px',
     backgroundColor: '#1e70ff',
     color: '#fff',
-    padding: '12px 24px',
+    border: 'none',
     borderRadius: '6px',
-    textDecoration: 'none',
     fontSize: '16px',
+    cursor: 'pointer',
+    display: 'block',
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
 };
