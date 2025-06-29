@@ -2,10 +2,6 @@
 import OpenAI from 'openai';
 import { getMemory, updateMemory } from '../../utils/Memory';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
 const systemPrompt = `
 You are Max — the AI representative for MovingCo, a long-distance moving coordination service founded by a military logistics expert who saw firsthand how painful and untrustworthy moving can be.
 
@@ -35,12 +31,16 @@ Your mission:
 `;
 
 export default async function handler(req, res) {
-  const { messages } = req.body;
-
   try {
+    // ✅ Instantiate OpenAI client INSIDE the handler
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
+
+    const { messages } = req.body;
     const lastUserMessage = messages[messages.length - 1];
 
-    // Store the user's most recent message
+    // ✅ Update memory with latest user message
     updateMemory({
       role: lastUserMessage.role,
       content: lastUserMessage.content,
@@ -48,7 +48,7 @@ export default async function handler(req, res) {
 
     const memoryMessages = getMemory().messages;
 
-    // OpenAI SDK v4 - correct GPT call
+    // ✅ Create GPT-4 response
     const completion = await openai.chat.completions.create({
       model: 'gpt-4',
       messages: [
@@ -58,16 +58,15 @@ export default async function handler(req, res) {
       temperature: 0.7,
     });
 
-    // ✅ Properly extract message content from SDK v4
     const replyContent = completion.choices[0]?.message?.content;
 
-    // Store assistant response
+    // ✅ Save assistant reply to memory
     updateMemory({
       role: 'assistant',
       content: replyContent,
     });
 
-    // Send it back to the frontend
+    // ✅ Respond to frontend
     res.status(200).json({ reply: replyContent });
   } catch (err) {
     console.error('OpenAI error:', err);
