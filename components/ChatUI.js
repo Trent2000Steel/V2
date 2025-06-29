@@ -138,7 +138,8 @@ export default function ChatUI() {
       <style jsx>{`
         .typing {
           font-style: italic;
-          font-size: 14px;
+          font-size: 15px;
+          font-family: 'Inter', sans-serif;
         }
         .dot {
           animation: blink 1.2s infinite;
@@ -165,6 +166,7 @@ const styles = {
     flexGrow: 1,
     height: '100%',
     backgroundColor: '#fff',
+    fontFamily: '"Inter", sans-serif',
   },
   scrollContainer: {
     flexGrow: 1,
@@ -180,6 +182,9 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: '#f9f9f9',
+    fontSize: '17px',
+    lineHeight: '1.6',
+    fontFamily: '"Inter", sans-serif',
   },
   inputBar: {
     padding: '12px',
@@ -193,8 +198,9 @@ const styles = {
     padding: '10px',
     border: '1px solid #ccc',
     borderRadius: '6px',
-    fontSize: '16px',
+    fontSize: '17px',
     marginRight: '8px',
+    fontFamily: '"Inter", sans-serif',
   },
   sendBtn: {
     backgroundColor: '#1e70ff',
@@ -203,13 +209,17 @@ const styles = {
     border: 'none',
     borderRadius: '6px',
     fontWeight: 'bold',
+    fontFamily: '"Inter", sans-serif',
   },
   messageBubble: {
     maxWidth: '80%',
-    padding: '10px 14px',
-    borderRadius: '12px',
-    marginBottom: '10px',
+    padding: '12px 16px',
+    borderRadius: '14px',
+    marginBottom: '12px',
     position: 'relative',
+    fontSize: '17px',
+    fontFamily: '"Inter", sans-serif',
+    lineHeight: '1.6',
   },
   assistantBubble: {
     backgroundColor: '#e6e6e6',
@@ -239,5 +249,7 @@ const styles = {
     padding: '8px 14px',
     fontSize: '14px',
     cursor: 'pointer',
+    fontFamily: '"Inter", sans-serif',
+    fontWeight: 500,
   },
 };
