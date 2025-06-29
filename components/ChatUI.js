@@ -10,9 +10,11 @@ export default function ChatUI() {
     },
   ]);
   const [input, setInput] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
   const bottomRef = useRef(null);
 
   const sendMessageToAPI = async (allMessages) => {
+    setIsTyping(true);
     try {
       const response = await fetch('/api/chat', {
         method: 'POST',
@@ -20,7 +22,7 @@ export default function ChatUI() {
         body: JSON.stringify({ messages: allMessages }),
       });
       const data = await response.json();
-
+      setIsTyping(false);
       setMessages(prev => [
         ...prev,
         {
@@ -31,6 +33,7 @@ export default function ChatUI() {
       ]);
     } catch (error) {
       console.error('API error:', error);
+      setIsTyping(false);
       setMessages(prev => [
         ...prev,
         {
@@ -60,7 +63,7 @@ export default function ChatUI() {
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  }, [messages, isTyping]);
 
   return (
     <div style={styles.wrapper}>
@@ -92,6 +95,16 @@ export default function ChatUI() {
               </div>
             </div>
           ))}
+
+          {isTyping && (
+            <div style={{ ...styles.messageBubble, ...styles.assistantBubble }}>
+              <div style={styles.typingDots}>
+                <span>.</span><span>.</span><span>.</span>
+              </div>
+              <div style={styles.timestamp}>{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+            </div>
+          )}
+
           <div ref={bottomRef} />
         </div>
       </div>
@@ -196,5 +209,11 @@ const styles = {
     padding: '8px 14px',
     fontSize: '14px',
     cursor: 'pointer',
+  },
+  typingDots: {
+    display: 'flex',
+    fontSize: '24px',
+    gap: '4px',
+    animation: 'blink 1s infinite',
   },
 };
