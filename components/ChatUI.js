@@ -17,8 +17,7 @@ export default function ChatUI() {
           options: ['Price', 'Damage', 'Timing', 'Just guide me'],
         }
       ]);
-    }, 600); // Delay intro by 600ms
-
+    }, 600);
     return () => clearTimeout(introDelay);
   }, []);
 
@@ -28,8 +27,7 @@ export default function ChatUI() {
 
   const sendMessageToAPI = async (allMessages) => {
     try {
-      setTyping(true); // Show typing animation
-
+      setTyping(true);
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -109,9 +107,11 @@ export default function ChatUI() {
                   ))}
                 </div>
               )}
-              <div style={styles.timestamp}>
-                {new Date(msg.id).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-              </div>
+              {msg.id !== 1 && (
+                <div style={styles.timestamp}>
+                  {new Date(msg.id).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </div>
+              )}
             </div>
           ))}
 
