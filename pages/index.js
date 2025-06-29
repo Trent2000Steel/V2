@@ -13,7 +13,9 @@ export default function Home() {
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
         />
-        <link rel="icon" href="/favicon.ico" />
+
+        {/* ✅ Favicon */}
+        <link rel="icon" type="image/png" href="/Favicon.png" />
 
         {/* ✅ Open Graph for link preview */}
         <meta property="og:title" content="MovingCo — Moving You Can Trust" />
