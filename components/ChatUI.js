@@ -1,20 +1,27 @@
 import { useEffect, useRef, useState } from 'react';
 
 export default function ChatUI() {
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      role: 'assistant',
-      text: "I’m Max — your MovingCo AI trained to save you from a moving nightmare.\nWhat’s weighing on you most right now?",
-      options: ['Price', 'Damage', 'Timing', 'Just guide me'],
-    },
-  ]);
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
+  const [isTyping, setIsTyping] = useState(true);
   const bottomRef = useRef(null);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setMessages([
+        {
+          id: Date.now(),
+          role: 'assistant',
+          text: "I’m Max — your MovingCo AI trained to save you from a moving nightmare.\nWhat’s weighing on you most right now?",
+          options: ['Price', 'Damage', 'Timing', 'Just guide me'],
+        }
+      ]);
+      setIsTyping(false);
+    }, 700);
+    return () => clearTimeout(timer);
+  }, []);
+
   const sendMessageToAPI = async (allMessages) => {
-    setIsTyping(true);
     try {
       const response = await fetch('/api/chat', {
         method: 'POST',
@@ -22,7 +29,6 @@ export default function ChatUI() {
         body: JSON.stringify({ messages: allMessages }),
       });
       const data = await response.json();
-      setIsTyping(false);
       setMessages(prev => [
         ...prev,
         {
@@ -33,7 +39,6 @@ export default function ChatUI() {
       ]);
     } catch (error) {
       console.error('API error:', error);
-      setIsTyping(false);
       setMessages(prev => [
         ...prev,
         {
@@ -63,7 +68,13 @@ export default function ChatUI() {
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, isTyping]);
+  }, [messages]);
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSend();
+    }
+  };
 
   return (
     <div style={styles.wrapper}>
@@ -101,7 +112,6 @@ export default function ChatUI() {
               <div style={styles.typingDots}>
                 <span>.</span><span>.</span><span>.</span>
               </div>
-              <div style={styles.timestamp}>{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
             </div>
           )}
 
@@ -113,12 +123,7 @@ export default function ChatUI() {
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              e.preventDefault();
-              handleSend();
-            }
-          }}
+          onKeyDown={handleKeyDown}
           placeholder="Type a message"
           style={styles.input}
         />
@@ -212,8 +217,10 @@ const styles = {
   },
   typingDots: {
     display: 'flex',
-    fontSize: '24px',
     gap: '4px',
-    animation: 'blink 1s infinite',
+    fontSize: '24px',
+    paddingTop: '4px',
+    paddingBottom: '4px',
+    animation: 'blink 1s ease-in-out infinite',
   },
 };
