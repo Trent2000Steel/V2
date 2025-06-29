@@ -14,6 +14,19 @@ export default function Home() {
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
         />
         <link rel="icon" href="/favicon.ico" />
+
+        {/* ✅ Open Graph for link preview */}
+        <meta property="og:title" content="MovingCo — Moving You Can Trust" />
+        <meta property="og:description" content="Flat-rate long-distance moves with real people watching your stuff. Seriously." />
+        <meta property="og:image" content="https://trustmovingco.com/Og-image.png" />
+        <meta property="og:url" content="https://trustmovingco.com" />
+        <meta property="og:type" content="website" />
+
+        {/* ✅ Twitter card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="MovingCo — Moving You Can Trust" />
+        <meta name="twitter:description" content="We handle your move with care, protection, and a single point of contact." />
+        <meta name="twitter:image" content="https://trustmovingco.com/Og-image.png" />
       </Head>
 
       <div style={styles.page}>
@@ -31,15 +44,15 @@ const styles = {
   page: {
     display: 'flex',
     flexDirection: 'column',
-    height: '100dvh',          // Full device height
+    height: '100dvh',
     backgroundColor: '#fff',
-    overflow: 'hidden',        // Prevent scrolling the whole page
+    overflow: 'hidden',
   },
   chatContainer: {
     flexGrow: 1,
     display: 'flex',
     flexDirection: 'column',
-    overflow: 'hidden',        // Lock scroll to ChatUI
-    minHeight: 0,              // Allows child flex container to shrink properly on mobile
+    overflow: 'hidden',
+    minHeight: 0,
   },
 };
