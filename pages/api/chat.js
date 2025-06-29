@@ -31,15 +31,14 @@ Your mission:
 
 export default async function handler(req, res) {
   try {
-    // ✅ Load OpenAI safely inside the function
-    const openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
-    });
+    const apiKey = process.env.OPENAI_API_KEY;
+    if (!apiKey) throw new Error('Missing OpenAI API key');
+
+    const openai = new OpenAI({ apiKey });
 
     const { messages } = req.body;
     const lastUserMessage = messages[messages.length - 1];
 
-    // ✅ Save last user message to memory
     updateMemory({
       role: lastUserMessage.role,
       content: lastUserMessage.content,
@@ -47,7 +46,6 @@ export default async function handler(req, res) {
 
     const memoryMessages = getMemory().messages;
 
-    // ✅ GPT-4o (Turbo Omni)
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o',
       messages: [
@@ -59,13 +57,11 @@ export default async function handler(req, res) {
 
     const replyContent = completion.choices[0]?.message?.content;
 
-    // ✅ Save assistant reply
     updateMemory({
       role: 'assistant',
       content: replyContent,
     });
 
-    // ✅ Send back to frontend
     res.status(200).json({ reply: replyContent });
   } catch (err) {
     console.error('OpenAI error:', err);
