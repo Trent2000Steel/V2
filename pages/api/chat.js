@@ -31,6 +31,9 @@ Your mission:
 
 export default async function handler(req, res) {
   try {
+    // ✅ Debug log to verify environment variable presence
+    console.log('🔍 Loaded API key:', process.env.OPENAI_API_KEY ? '[FOUND]' : '[MISSING]');
+
     const apiKey = process.env.OPENAI_API_KEY;
     if (!apiKey) throw new Error('Missing OpenAI API key');
 
@@ -39,6 +42,7 @@ export default async function handler(req, res) {
     const { messages } = req.body;
     const lastUserMessage = messages[messages.length - 1];
 
+    // ✅ Save latest user message
     updateMemory({
       role: lastUserMessage.role,
       content: lastUserMessage.content,
@@ -46,6 +50,7 @@ export default async function handler(req, res) {
 
     const memoryMessages = getMemory().messages;
 
+    // ✅ GPT-4o request
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o',
       messages: [
