@@ -2,6 +2,7 @@ export default function Header() {
   return (
     <header style={styles.header}>
       <h1 style={styles.logo}>MovingCo</h1>
+      <img src="/USA.png" alt="USA flag" style={styles.flag} />
     </header>
   );
 }
@@ -17,7 +18,8 @@ const styles = {
     position: 'sticky',
     top: 0,
     zIndex: 1000,
-    flexShrink: 0, // ✅ Prevent header from shrinking
+    flexShrink: 0,
+    gap: '12px',
   },
   logo: {
     fontSize: '20px',
@@ -25,6 +27,11 @@ const styles = {
     color: '#1e1e1e',
     margin: 0,
     fontFamily: 'sans-serif',
-    userSelect: 'none', // ✅ Prevent accidental highlight flicker
+    userSelect: 'none',
+  },
+  flag: {
+    height: '32px',
+    width: '32px',
+    objectFit: 'contain',
   },
 };
