@@ -3,32 +3,42 @@ import { useEffect, useRef, useState } from 'react';
 export default function ChatUI() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
-  const [isTyping, setIsTyping] = useState(true);
+  const [typing, setTyping] = useState(false);
   const bottomRef = useRef(null);
 
+  // Show initial message after short delay
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const introDelay = setTimeout(() => {
       setMessages([
         {
-          id: Date.now(),
+          id: 1,
           role: 'assistant',
           text: "I’m Max — your MovingCo AI trained to save you from a moving nightmare.\nWhat’s weighing on you most right now?",
           options: ['Price', 'Damage', 'Timing', 'Just guide me'],
         }
       ]);
-      setIsTyping(false);
-    }, 700);
-    return () => clearTimeout(timer);
+    }, 600); // Delay intro by 600ms
+
+    return () => clearTimeout(introDelay);
   }, []);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
   const sendMessageToAPI = async (allMessages) => {
     try {
+      setTyping(true); // Show typing animation
+
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: allMessages }),
       });
+
       const data = await response.json();
+      setTyping(false);
+
       setMessages(prev => [
         ...prev,
         {
@@ -39,6 +49,7 @@ export default function ChatUI() {
       ]);
     } catch (error) {
       console.error('API error:', error);
+      setTyping(false);
       setMessages(prev => [
         ...prev,
         {
@@ -66,12 +77,9 @@ export default function ChatUI() {
     sendMessageToAPI(updatedMessages.map(m => ({ role: m.role, content: m.text })));
   };
 
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
-
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
       handleSend();
     }
   };
@@ -107,14 +115,11 @@ export default function ChatUI() {
             </div>
           ))}
 
-          {isTyping && (
+          {typing && (
             <div style={{ ...styles.messageBubble, ...styles.assistantBubble }}>
-              <div style={styles.typingDots}>
-                <span>.</span><span>.</span><span>.</span>
-              </div>
+              <span className="typing">Max is typing<span className="dot">.</span><span className="dot">.</span><span className="dot">.</span></span>
             </div>
           )}
-
           <div ref={bottomRef} />
         </div>
       </div>
@@ -129,6 +134,26 @@ export default function ChatUI() {
         />
         <button onClick={handleSend} style={styles.sendBtn}>Send</button>
       </div>
+
+      <style jsx>{`
+        .typing {
+          font-style: italic;
+          font-size: 14px;
+        }
+        .dot {
+          animation: blink 1.2s infinite;
+        }
+        .dot:nth-child(2) {
+          animation-delay: 0.2s;
+        }
+        .dot:nth-child(3) {
+          animation-delay: 0.4s;
+        }
+        @keyframes blink {
+          0%, 80%, 100% { opacity: 0; }
+          40% { opacity: 1; }
+        }
+      `}</style>
     </div>
   );
 }
@@ -214,13 +239,5 @@ const styles = {
     padding: '8px 14px',
     fontSize: '14px',
     cursor: 'pointer',
-  },
-  typingDots: {
-    display: 'flex',
-    gap: '4px',
-    fontSize: '24px',
-    paddingTop: '4px',
-    paddingBottom: '4px',
-    animation: 'blink 1s ease-in-out infinite',
   },
 };
