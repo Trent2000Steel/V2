@@ -4,24 +4,29 @@ export default function Header() {
       <div style={styles.centerWrap}>
         <h1 style={styles.logo}>MovingCo</h1>
       </div>
-      <img src="/USA.png" alt="USA flag" style={styles.flag} />
+      <img
+        src="/USA.png"
+        alt="USA flag"
+        style={styles.flag}
+        width={48}
+        height={48}
+      />
     </header>
   );
 }
 
 const styles = {
   header: {
-    height: '56px',
+    height: '64px',
     backgroundColor: '#ffffff',
     borderBottom: '1px solid #e0e0e0',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center', // center the content wrapper
+    justifyContent: 'center',
     position: 'sticky',
     top: 0,
     zIndex: 1000,
-    flexShrink: 0,
-    padding: '0 16px', // space for flag on the right
+    padding: '0 20px',
   },
   centerWrap: {
     flex: 1,
@@ -29,7 +34,7 @@ const styles = {
     justifyContent: 'center',
   },
   logo: {
-    fontSize: '20px',
+    fontSize: '22px',
     fontWeight: '600',
     color: '#1e1e1e',
     margin: 0,
@@ -37,8 +42,8 @@ const styles = {
     userSelect: 'none',
   },
   flag: {
-    height: '32px',
-    width: '32px',
+    height: '40px',
+    width: '40px',
     objectFit: 'contain',
   },
 };
