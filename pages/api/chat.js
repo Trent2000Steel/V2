@@ -1,5 +1,12 @@
 import OpenAI from 'openai';
-import { getMemory, updateMemory } from '../../utils/Memory';
+import {
+  getMemory,
+  updateMemory,
+  setCustomerInfo,
+  setIntent,
+  markLeadSent
+} from '../../utils/Memory';
+import { notifyTelegram } from '../../utils/TapUserResponse';
 import rateLimit from '../../utils/rateLimit';
 
 // Protect against abuse
@@ -43,9 +50,44 @@ export default async function handler(req, res) {
 
   const { messages } = req.body;
 
-  // Add memory update
+  // Update memory
   messages.forEach(m => updateMemory({ role: m.role, content: m.content }));
 
+  const memory = getMemory();
+  const lastUserMessage = messages.filter(m => m.role === 'user').slice(-1)[0]?.content?.toLowerCase() || '';
+  const info = memory.customerInfo;
+
+  // Detect customer intent from message if not already set
+  if (!memory.customerIntent) {
+    if (/reserve|book|yes|lock/i.test(lastUserMessage)) {
+      setIntent('reserve');
+    } else if (/email|send|later|think/i.test(lastUserMessage)) {
+      setIntent('email');
+    }
+  }
+
+  // Check if all required fields are present
+  const hasEmailOnly = info.email;
+  const hasFullReservationInfo =
+    info.fullName &&
+    info.email &&
+    info.phone &&
+    info.origin &&
+    (info.destination || info.destinationCity || info.destinationState);
+
+  // Trigger Telegram if user wants to reserve and we have enough info
+  if (memory.customerIntent === 'reserve' && hasFullReservationInfo && !memory.leadSent) {
+    markLeadSent();
+    await notifyTelegram({ ...info, intent: memory.customerIntent });
+  }
+
+  // (Optional) Trigger email export here if you build it later
+  // if (memory.customerIntent === 'email' && hasEmailOnly && !memory.leadSent) {
+  //   markLeadSent();
+  //   await sendEstimateEmail({ ...info, intent: memory.customerIntent });
+  // }
+
+  // Call OpenAI for next message
   try {
     const completion = await openai.chat.completions.create({
       model: 'gpt-4-turbo',
