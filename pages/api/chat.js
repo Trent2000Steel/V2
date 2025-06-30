@@ -75,10 +75,10 @@ export default async function handler(req, res) {
     info.origin &&
     (info.destination || info.destinationCity || info.destinationState);
 
-  // Trigger Telegram if user wants to reserve and we have enough info
-  if (memory.customerIntent === 'reserve' && hasFullReservationInfo && !memory.leadSent) {
+  // ✅ Updated trigger: check info.intent instead of memory.customerIntent
+  if (info.intent === 'reserve' && hasFullReservationInfo && !memory.leadSent) {
     markLeadSent();
-    await notifyTelegram({ ...info, intent: memory.customerIntent });
+    await notifyTelegram({ ...info, intent: info.intent });
   }
 
   // (Optional) Trigger email export here if you build it later
