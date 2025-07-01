@@ -6,7 +6,6 @@ export default function ChatUI() {
   const [typing, setTyping] = useState(false);
   const bottomRef = useRef(null);
 
-  // Show initial message after short delay
   useEffect(() => {
     const introDelay = setTimeout(() => {
       setMessages([
@@ -24,6 +23,9 @@ export default function ChatUI() {
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  const isEmail = (text) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text);
+  const isPhone = (text) => /^\+?[\d\s().-]{7,}$/.test(text);
 
   const sendMessageToAPI = async (allMessages) => {
     try {
@@ -61,17 +63,29 @@ export default function ChatUI() {
 
   const handleSend = () => {
     if (!input.trim()) return;
+
     const userMessage = { id: Date.now(), role: 'user', text: input };
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
     setInput('');
-    sendMessageToAPI(updatedMessages.map(m => ({ role: m.role, content: m.text })));
+
+    const payload = updatedMessages.map(m => ({ role: m.role, content: m.text }));
+
+    // Inject special contact memory if valid
+    if (isEmail(input.trim())) {
+      payload.push({ role: 'user', content: `setContactInfo::email::${input.trim()}` });
+    } else if (isPhone(input.trim())) {
+      payload.push({ role: 'user', content: `setContactInfo::phone::${input.trim()}` });
+    }
+
+    sendMessageToAPI(payload);
   };
 
   const handleOptionClick = (optionText) => {
     const userMessage = { id: Date.now(), role: 'user', text: optionText };
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
+
     sendMessageToAPI(updatedMessages.map(m => ({ role: m.role, content: m.text })));
   };
 
