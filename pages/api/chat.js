@@ -2,8 +2,6 @@ import OpenAI from 'openai';
 import {
   getMemory,
   updateMemory,
-  setCustomerInfo,
-  setIntent,
   markLeadSent
 } from '../../utils/Memory';
 import { notifyTelegram } from '../../utils/TapUserResponse';
@@ -24,17 +22,21 @@ Your job is to build trust, provide accurate estimates, and help people book saf
 Your goal:
 1. Build trust and gather full move details.
 2. Provide a realistic, price-range estimate for their move using your knowledge of fuel, route, and labor pricing.
-3. Offer to either (a) Reserve the move or (b) Email the quote.
+3. Offer to connect them with a human coordinator to finalize their flat rate.
 
 MoveSafe Method™ includes: verified pros, quote transparency, shipment-specific supplies (TV boxes, mattress covers, etc.), and a personal concierge throughout the move.
+
++ In your *very first reply* to the user, mention at least one benefit of the MoveSafe Method™ — such as verified pros, protective materials, or transparent flat-rate quotes — based on what the user seems most concerned about.
 
 Legal guardrails:
 - You are not a licensed freight broker.
 - Do not promise insurance or full replacement value.
 - Do not guarantee delivery dates or exact costs — always offer a price *range*.
-- If the customer asks about coverage, explain that MovingCo offers a protection plan for transport damage only (not packing). It's reimbursement-based and only applies to items packed by MovingCo's approved pros.
+- If the customer asks about coverage, explain: 
+  "Every move is coordinated through our MoveSafe Method™, which helps prevent damage in the first place using protective materials and vetted crews. Most licensed movers include basic protection during transport — but the real value is avoiding problems before they happen."
 
-Stay warm, professional, and concise. If they’re price sensitive, gently offer loading-only or packing-only options to save money. Do not be pushy — be a calm expert they can rely on.
+Stay warm, professional, and concise. If they’re price sensitive, gently mention there are ways to save — but offer to connect them with a Moving Coordinator who can go over specifics.
+Do not be pushy — be a calm expert they can rely on.
 `;
 
 export default async function handler(req, res) {
@@ -54,38 +56,14 @@ export default async function handler(req, res) {
   messages.forEach(m => updateMemory({ role: m.role, content: m.content }));
 
   const memory = getMemory();
-  const lastUserMessage = messages.filter(m => m.role === 'user').slice(-1)[0]?.content?.toLowerCase() || '';
   const info = memory.customerInfo;
+  const hasContact = info.phone || info.email;
 
-  // Detect customer intent from message if not already set
-  if (!memory.customerIntent) {
-    if (/reserve|book|yes|lock/i.test(lastUserMessage)) {
-      setIntent('reserve');
-    } else if (/email|send|later|think/i.test(lastUserMessage)) {
-      setIntent('email');
-    }
-  }
-
-  // Check if all required fields are present
-  const hasEmailOnly = info.email;
-  const hasFullReservationInfo =
-    info.fullName &&
-    info.email &&
-    info.phone &&
-    info.origin &&
-    (info.destination || info.destinationCity || info.destinationState);
-
-  // ✅ Updated trigger: check info.intent instead of memory.customerIntent
-  if (info.intent === 'reserve' && hasFullReservationInfo && !memory.leadSent) {
+  // Trigger Telegram if contact info is available and not already sent
+  if (hasContact && !memory.leadSent) {
     markLeadSent();
-    await notifyTelegram({ ...info, intent: info.intent });
+    await notifyTelegram({ ...info, quote: memory.quote });
   }
-
-  // (Optional) Trigger email export here if you build it later
-  // if (memory.customerIntent === 'email' && hasEmailOnly && !memory.leadSent) {
-  //   markLeadSent();
-  //   await sendEstimateEmail({ ...info, intent: memory.customerIntent });
-  // }
 
   // Call OpenAI for next message
   try {
