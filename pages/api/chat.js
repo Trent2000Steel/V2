@@ -2,8 +2,7 @@ import OpenAI from 'openai';
 import {
   getMemory,
   updateMemory,
-  markLeadSent,
-  setCustomerInfo
+  saveQuote
 } from '../../utils/Memory';
 import { notifyTelegram } from '../../utils/TapUserResponse';
 import rateLimit from '../../utils/rateLimit';
@@ -35,7 +34,7 @@ Legal guardrails:
 - If the customer asks about coverage, explain: 
   "Every move is coordinated through our MoveSafe Method™, which helps prevent damage in the first place using protective materials and vetted crews. Most licensed movers include basic protection during transport — but the real value is avoiding problems before they happen."
 
-Stay warm, professional, and concise. If they’re price sensitive, mention there are ways to save — then recommend connecting with a Moving Coordinator for specifics. Don’t open up back-and-forth quoting yourself.
+Stay warm, professional, and concise. If they’re price sensitive, mention there are ways to save — but guide them to connect with a Moving Coordinator for specifics. Do not be pushy — be a calm expert they can rely on.
 `;
 
 export default async function handler(req, res) {
@@ -51,26 +50,15 @@ export default async function handler(req, res) {
 
   const { messages } = req.body;
 
-  // Handle manual contact info triggers
-  messages.forEach(m => {
-    if (m.role === 'user' && typeof m.content === 'string') {
-      if (m.content.startsWith('setContactInfo::')) {
-        const [, type, value] = m.content.split('::');
-        if (type === 'email') setCustomerInfo({ email: value });
-        if (type === 'phone') setCustomerInfo({ phone: value });
-      }
-    }
-  });
-
-  // Store full message history
   messages.forEach(m => updateMemory({ role: m.role, content: m.content }));
 
   const memory = getMemory();
   const info = memory.customerInfo;
+
   const hasContact = info.phone || info.email;
 
-  if (hasContact && !memory.leadSent) {
-    markLeadSent();
+  // NEW: Trigger Telegram message every time valid contact is entered
+  if (hasContact) {
     await notifyTelegram({ ...info, quote: memory.quote });
   }
 
