@@ -2,12 +2,12 @@ import OpenAI from 'openai';
 import {
   getMemory,
   updateMemory,
-  markLeadSent
+  markLeadSent,
+  setCustomerInfo
 } from '../../utils/Memory';
 import { notifyTelegram } from '../../utils/TapUserResponse';
 import rateLimit from '../../utils/rateLimit';
 
-// Protect against abuse
 const limiter = rateLimit({ interval: 60000, uniqueTokenPerInterval: 500 });
 
 const openai = new OpenAI({
@@ -35,13 +35,12 @@ Legal guardrails:
 - If the customer asks about coverage, explain: 
   "Every move is coordinated through our MoveSafe Method™, which helps prevent damage in the first place using protective materials and vetted crews. Most licensed movers include basic protection during transport — but the real value is avoiding problems before they happen."
 
-Stay warm, professional, and concise. If they’re price sensitive, gently mention there are ways to save — but offer to connect them with a Moving Coordinator who can go over specifics.
-Do not be pushy — be a calm expert they can rely on.
+Stay warm, professional, and concise. If they’re price sensitive, mention there are ways to save — then recommend connecting with a Moving Coordinator for specifics. Don’t open up back-and-forth quoting yourself.
 `;
 
 export default async function handler(req, res) {
   try {
-    await limiter.check(res, 5, 'CACHE_TOKEN'); // max 5 req/min per user
+    await limiter.check(res, 5, 'CACHE_TOKEN');
   } catch {
     return res.status(429).json({ error: 'Too many requests. Please wait and try again.' });
   }
@@ -52,20 +51,29 @@ export default async function handler(req, res) {
 
   const { messages } = req.body;
 
-  // Update memory
+  // Handle manual contact info triggers
+  messages.forEach(m => {
+    if (m.role === 'user' && typeof m.content === 'string') {
+      if (m.content.startsWith('setContactInfo::')) {
+        const [, type, value] = m.content.split('::');
+        if (type === 'email') setCustomerInfo({ email: value });
+        if (type === 'phone') setCustomerInfo({ phone: value });
+      }
+    }
+  });
+
+  // Store full message history
   messages.forEach(m => updateMemory({ role: m.role, content: m.content }));
 
   const memory = getMemory();
   const info = memory.customerInfo;
   const hasContact = info.phone || info.email;
 
-  // Trigger Telegram if contact info is available and not already sent
   if (hasContact && !memory.leadSent) {
     markLeadSent();
     await notifyTelegram({ ...info, quote: memory.quote });
   }
 
-  // Call OpenAI for next message
   try {
     const completion = await openai.chat.completions.create({
       model: 'gpt-4-turbo',
