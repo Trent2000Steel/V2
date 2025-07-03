@@ -7,6 +7,7 @@ export default function ChatUI() {
   const [typing, setTyping] = useState(false);
   const bottomRef = useRef(null);
 
+  // Show initial message after short delay
   useEffect(() => {
     const introDelay = setTimeout(() => {
       setMessages([
@@ -65,14 +66,14 @@ export default function ChatUI() {
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
 
-    // 🔥 Trigger Telegram send if email or phone is detected
+    // 🔥 Trigger if email or phone is detected
     const lowerText = input.trim().toLowerCase();
     const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(lowerText);
     const isPhone = /^\d{10,}$/.test(lowerText.replace(/\D/g, ''));
 
     if (isEmail || isPhone) {
-      if (isEmail) setCustomerInfo({ email: lowerText });
-      if (isPhone) setCustomerInfo({ phone: lowerText });
+      if (isEmail) setCustomerInfo({ email: input.trim() });
+      if (isPhone) setCustomerInfo({ phone: input.trim() });
       fetch('/api/sendLead', { method: 'POST' });
     }
 
