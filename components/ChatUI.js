@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { setCustomerInfo } from '../utils/Memory';
+import { setCustomerInfo } from '../utils/Memory'; // ✅ Added
 
 export default function ChatUI() {
   const [messages, setMessages] = useState([]);
@@ -66,14 +66,16 @@ export default function ChatUI() {
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
 
-    // 🔥 Trigger if email or phone is detected
+    // ✅ Detect contact info and update memory
     const lowerText = input.trim().toLowerCase();
     const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(lowerText);
     const isPhone = /^\d{10,}$/.test(lowerText.replace(/\D/g, ''));
 
     if (isEmail || isPhone) {
-      if (isEmail) setCustomerInfo({ email: input.trim() });
-      if (isPhone) setCustomerInfo({ phone: input.trim() });
+      setCustomerInfo({
+        email: isEmail ? input.trim() : '',
+        phone: isPhone ? input.trim() : '',
+      });
       fetch('/api/sendLead', { method: 'POST' });
     }
 
