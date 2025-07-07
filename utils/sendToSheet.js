@@ -20,8 +20,13 @@ export async function sendToSheet(sessionId, step, data, timestamp) {
     });
 
     const text = await res.text();
-    console.log('✅ Sent to Google Sheet:', text);
+
+    if (!res.ok) {
+      console.error(`❌ Google Script Error — Status: ${res.status}`, text);
+    } else {
+      console.log('✅ Sent to Google Sheet:', text);
+    }
   } catch (err) {
-    console.error('❌ Failed to send to Sheet:', err);
+    console.error('❌ Network or Fetch Error:', err);
   }
 }
