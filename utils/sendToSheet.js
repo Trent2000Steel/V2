@@ -1,7 +1,7 @@
 // utils/sendToSheet.js
 
 export async function sendToSheet(sessionId, step, data, timestamp) {
-  const webhookURL = 'https://script.google.com/macros/s/AKfycbxKDHzODFVzdVMkkoLZTB-oaSphXX6NJpsxJOE-tB0/exec';
+  const webhookURL = 'https://script.google.com/macros/s/AKfycbxnfeVQ4BbmEJv5JzCBjScYKlRr1itE5axjfA9PrNSItAtKMAMSGsvRkC7h6UOlzVdh/exec';
 
   const payload = {
     sessionId,
