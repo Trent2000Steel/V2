@@ -4,7 +4,6 @@ import {
   updateMemory,
   saveQuote
 } from '../../utils/Memory';
-import { notifyTelegram } from '../../utils/TapUserResponse';
 import rateLimit from '../../utils/rateLimit';
 
 const limiter = rateLimit({ interval: 60000, uniqueTokenPerInterval: 500 });
@@ -53,14 +52,6 @@ export default async function handler(req, res) {
   messages.forEach(m => updateMemory({ role: m.role, content: m.content }));
 
   const memory = getMemory();
-  const info = memory.customerInfo;
-
-  const hasContact = info.phone || info.email;
-
-  // NEW: Trigger Telegram message every time valid contact is entered
-  if (hasContact) {
-    await notifyTelegram({ ...info, quote: memory.quote });
-  }
 
   try {
     const completion = await openai.chat.completions.create({
