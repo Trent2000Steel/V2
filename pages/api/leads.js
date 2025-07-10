@@ -20,14 +20,24 @@ export default async function handler(req, res) {
   sessionStore[sessionId].messages.push({ message, timestamp });
 
   try {
-    await sendToSheet(sessionId, 'message', 'content', message);
+    await sendToSheet({
+      sessionId,
+      step: 'message',
+      field: 'content',
+      value: message
+    });
   } catch (err) {
     console.error('❌ Sheet logging error (message):', err);
   }
 
   if (estimate && !sessionStore[sessionId].estimateLogged) {
     try {
-      await sendToSheet(sessionId, 'estimate', 'content', estimate);
+      await sendToSheet({
+        sessionId,
+        step: 'estimate',
+        field: 'content',
+        value: estimate
+      });
       sessionStore[sessionId].estimateLogged = true;
     } catch (err) {
       console.error('❌ Sheet logging error (estimate):', err);
