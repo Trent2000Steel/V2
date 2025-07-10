@@ -1,14 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
 import { setCustomerInfo } from '../utils/Memory';
 
-// ✅ Telegram notify helper for user messages
-const notifyTelegram = async (text) => {
+// ✅ Telegram notify helper
+const notifyTelegram = async (text, role = 'user') => {
   try {
     const sessionId = sessionStorage.getItem('sessionId') || 'unknown';
     await fetch('/api/telegram', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text, sessionId }),
+      body: JSON.stringify({
+        text: `[${role.toUpperCase()}] ${text}`,
+        sessionId
+      }),
     });
   } catch (err) {
     console.error('Telegram error:', err);
@@ -21,7 +24,7 @@ export default function ChatUI() {
   const [typing, setTyping] = useState(false);
   const bottomRef = useRef(null);
 
-  // ✅ Set session ID once on load
+  // ✅ Set session ID once
   useEffect(() => {
     const existing = sessionStorage.getItem('sessionId');
     if (!existing) {
@@ -68,6 +71,9 @@ export default function ChatUI() {
           text: data.reply || "Sorry, something went wrong.",
         }
       ]);
+
+      // ✅ Telegram notify for Max response
+      notifyTelegram(data.reply, 'max');
     } catch (error) {
       console.error('API error:', error);
       setTyping(false);
@@ -88,7 +94,7 @@ export default function ChatUI() {
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
 
-    notifyTelegram(input); // ✅ Notify on user message
+    notifyTelegram(input, 'user'); // ✅ Notify user message
 
     const lowerText = input.trim().toLowerCase();
     const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(lowerText);
@@ -110,7 +116,9 @@ export default function ChatUI() {
     const userMessage = { id: Date.now(), role: 'user', text: optionText };
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
-    notifyTelegram(optionText); // ✅ Notify on button click
+
+    notifyTelegram(optionText, 'user'); // ✅ Notify button click
+
     sendMessageToAPI(updatedMessages.map(m => ({ role: m.role, content: m.text })));
   };
 
