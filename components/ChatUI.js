@@ -1,5 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
-import { setCustomerInfo } from '../utils/Memory'; // ✅ Added
+import { setCustomerInfo } from '../utils/Memory'; // ✅ Already present
+
+// ✅ Telegram notify helper
+const notifyTelegram = async (text) => {
+  try {
+    await fetch('/api/telegram', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text }),
+    });
+  } catch (err) {
+    console.error('Telegram error:', err);
+  }
+};
 
 export default function ChatUI() {
   const [messages, setMessages] = useState([]);
@@ -7,7 +20,6 @@ export default function ChatUI() {
   const [typing, setTyping] = useState(false);
   const bottomRef = useRef(null);
 
-  // Show initial message after short delay
   useEffect(() => {
     const introDelay = setTimeout(() => {
       setMessages([
@@ -66,7 +78,8 @@ export default function ChatUI() {
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
 
-    // ✅ Detect contact info and update memory
+    notifyTelegram(input); // ✅ Instant Telegram ping
+
     const lowerText = input.trim().toLowerCase();
     const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(lowerText);
     const isPhone = /^\d{10,}$/.test(lowerText.replace(/\D/g, ''));
@@ -87,6 +100,7 @@ export default function ChatUI() {
     const userMessage = { id: Date.now(), role: 'user', text: optionText };
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
+    notifyTelegram(optionText); // ✅ Ping Telegram on button click
     sendMessageToAPI(updatedMessages.map(m => ({ role: m.role, content: m.text })));
   };
 
@@ -129,7 +143,6 @@ export default function ChatUI() {
               )}
             </div>
           ))}
-
           {typing && (
             <div style={{ ...styles.messageBubble, ...styles.assistantBubble }}>
               <span className="typing">Max is typing<span className="dot">.</span><span className="dot">.</span><span className="dot">.</span></span>
