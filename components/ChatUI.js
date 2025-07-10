@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { setCustomerInfo } from '../utils/Memory';
 
-// ✅ Telegram notify helper with session ID
+// ✅ Telegram notify helper for user messages
 const notifyTelegram = async (text) => {
   try {
     const sessionId = sessionStorage.getItem('sessionId') || 'unknown';
@@ -29,7 +29,6 @@ export default function ChatUI() {
     }
   }, []);
 
-  // Show first assistant message
   useEffect(() => {
     const introDelay = setTimeout(() => {
       setMessages([
@@ -51,10 +50,11 @@ export default function ChatUI() {
   const sendMessageToAPI = async (allMessages) => {
     try {
       setTyping(true);
+      const sessionId = sessionStorage.getItem('sessionId') || 'unknown';
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: allMessages }),
+        body: JSON.stringify({ messages: allMessages, sessionId }),
       });
 
       const data = await response.json();
@@ -88,7 +88,7 @@ export default function ChatUI() {
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
 
-    notifyTelegram(input); // ✅ Notify Telegram with session ID
+    notifyTelegram(input); // ✅ Notify on user message
 
     const lowerText = input.trim().toLowerCase();
     const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(lowerText);
@@ -110,7 +110,7 @@ export default function ChatUI() {
     const userMessage = { id: Date.now(), role: 'user', text: optionText };
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
-    notifyTelegram(optionText); // ✅ Ping Telegram on button click
+    notifyTelegram(optionText); // ✅ Notify on button click
     sendMessageToAPI(updatedMessages.map(m => ({ role: m.role, content: m.text })));
   };
 
