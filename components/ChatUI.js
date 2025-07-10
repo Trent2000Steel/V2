@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
-import { setCustomerInfo } from '../utils/Memory'; // ✅ Already present
+import { setCustomerInfo } from '../utils/Memory';
 
-// ✅ Telegram notify helper
+// ✅ Telegram notify helper with session ID
 const notifyTelegram = async (text) => {
   try {
+    const sessionId = sessionStorage.getItem('sessionId') || 'unknown';
     await fetch('/api/telegram', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text }),
+      body: JSON.stringify({ text, sessionId }),
     });
   } catch (err) {
     console.error('Telegram error:', err);
@@ -20,6 +21,15 @@ export default function ChatUI() {
   const [typing, setTyping] = useState(false);
   const bottomRef = useRef(null);
 
+  // ✅ Set session ID once on load
+  useEffect(() => {
+    const existing = sessionStorage.getItem('sessionId');
+    if (!existing) {
+      sessionStorage.setItem('sessionId', crypto.randomUUID());
+    }
+  }, []);
+
+  // Show first assistant message
   useEffect(() => {
     const introDelay = setTimeout(() => {
       setMessages([
@@ -78,7 +88,7 @@ export default function ChatUI() {
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
 
-    notifyTelegram(input); // ✅ Instant Telegram ping
+    notifyTelegram(input); // ✅ Notify Telegram with session ID
 
     const lowerText = input.trim().toLowerCase();
     const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(lowerText);
