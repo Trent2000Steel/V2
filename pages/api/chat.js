@@ -12,6 +12,23 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+// ✅ Send Telegram
+async function sendTelegramMessage({ text, estimate }) {
+  try {
+    await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/telegram`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        text,
+        sessionId: Date.now().toString(),
+        estimate
+      }),
+    });
+  } catch (err) {
+    console.error('Telegram error:', err);
+  }
+}
+
 const systemPrompt = `
 You are Max — the AI representative for MovingCo, a long-distance moving coordination service founded by a military logistics expert who saw firsthand how painful and untrustworthy moving can be.
 
@@ -77,6 +94,12 @@ export default async function handler(req, res) {
     });
 
     const reply = completion.choices?.[0]?.message?.content || "Sorry, I couldn’t come up with a reply.";
+
+    // ✅ Look for estimate and ping Telegram
+    if (reply.toLowerCase().includes('estimate') && reply.includes('$')) {
+      await sendTelegramMessage({ text: reply, estimate: reply });
+    }
+
     res.status(200).json({ reply });
   } catch (err) {
     console.error('OpenAI error:', err);
