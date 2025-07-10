@@ -1,45 +1,50 @@
 // pages/api/leads.js
 import { sendToSheet } from '../../utils/sendToSheet';
-// Placeholder for email — we’ll build this next
-const sendToEmail = async () => {};
 
 let sessionStore = {}; // In-memory session tracking (temporary)
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
-  const { sessionId, step, data = {}, timestamp = Date.now() } = req.body;
+  const { sessionId, message = '', timestamp = Date.now(), estimate = null } = req.body;
 
   // Create or update session in memory
   if (!sessionStore[sessionId]) {
     sessionStore[sessionId] = {
       sessionId,
       startedAt: timestamp,
-      entries: [],
-      contactSent: false
+      messages: [],
+      estimateLogged: false
     };
   }
 
-  sessionStore[sessionId].entries.push({ step, data, timestamp });
+  // Save message
+  sessionStore[sessionId].messages.push({ message, timestamp });
 
-  // ✅ Send to Google Sheet
+  // Send message to Google Sheet immediately
   try {
-    await sendToSheet(sessionId, step, data, timestamp);
+    await sendToSheet({
+      sessionId,
+      type: 'message',
+      content: message,
+      timestamp
+    });
   } catch (err) {
-    console.error('❌ Sheet error:', err);
+    console.error('❌ Sheet logging error (message):', err);
   }
 
-  // 📬 Check for contact info and send email (later)
-  const hasContact =
-    data.name &&
-    (data.email?.includes('@') || data.phone?.length >= 8);
-
-  if (hasContact && !sessionStore[sessionId].contactSent) {
+  // If estimate is included, log that separately once
+  if (estimate && !sessionStore[sessionId].estimateLogged) {
     try {
-      await sendToEmail(sessionId, sessionStore[sessionId]);
-      sessionStore[sessionId].contactSent = true;
+      await sendToSheet({
+        sessionId,
+        type: 'estimate',
+        content: estimate,
+        timestamp
+      });
+      sessionStore[sessionId].estimateLogged = true;
     } catch (err) {
-      console.error('❌ Email error:', err);
+      console.error('❌ Sheet logging error (estimate):', err);
     }
   }
 
