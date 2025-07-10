@@ -1,25 +1,15 @@
-export async function sendToSheet(sessionId, step, data, timestamp) {
-  const webhookURL = 'https://script.google.com/macros/s/AKfycbwS4xzlsDmwg4ugbPxoKzwABuG9Ofqtap-Ic4qH7MhkQjfZWA7C_mC3gsQ8YJwQv6mu/exec';
+// /utils/sendToSheet.js
 
-  const payload = {
-    sessionId,
-    step,
-    data,
-    timestamp,
-  };
+export default async function sendToSheet({ sessionId, step, field, value }) {
+  const endpoint = 'https://script.google.com/macros/s/AKfycbyL5JJnz4xWJ5PtTja_g4pJzs8Rz9EYGatOBPNQuBs8vQ-Pq6RGeWapsYehiscCt8ba/exec';
 
   try {
-    const res = await fetch(webhookURL, {
+    await fetch(endpoint, {
       method: 'POST',
-      body: JSON.stringify(payload),
-      headers: {
-        'Content-Type': 'application/json'
-      }
+      body: JSON.stringify({ sessionId, step, field, value }),
+      headers: { 'Content-Type': 'application/json' },
     });
-
-    const text = await res.text();
-    console.log('✅ Sent to Google Sheet:', text);
   } catch (err) {
-    console.error('❌ Failed to send to Sheet:', err);
+    console.error('Google Sheets error:', err);
   }
 }
