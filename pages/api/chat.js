@@ -13,15 +13,14 @@ const openai = new OpenAI({
 });
 
 // ✅ Send Telegram
-async function sendTelegramMessage({ text, estimate }) {
+async function sendTelegramMessage({ text, sessionId }) {
   try {
     await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/telegram`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         text,
-        sessionId: Date.now().toString(),
-        estimate
+        sessionId
       }),
     });
   } catch (err) {
@@ -54,7 +53,7 @@ The MoveSafe Method™ includes:
 - Clean, single-use protective materials (TV boxes, mattress covers, etc.)
 - A personal concierge to oversee the move start to finish
 
-In your *very first reply*, mention one MoveSafe benefit based on what they seem most concerned about — cost, timing, safety, or trust.
+In your *very first reply*, mention one or more MoveSafe benefit based on what they seem most concerned about — cost, timing, safety, or trust.
 
 Legal guardrails:
 - You are not a licensed freight broker.
@@ -78,9 +77,7 @@ export default async function handler(req, res) {
   }
 
   const { messages } = req.body;
-
   messages.forEach(m => updateMemory({ role: m.role, content: m.content }));
-
   const memory = getMemory();
 
   try {
@@ -95,10 +92,8 @@ export default async function handler(req, res) {
 
     const reply = completion.choices?.[0]?.message?.content || "Sorry, I couldn’t come up with a reply.";
 
-    // ✅ Look for estimate and ping Telegram
-    if (reply.toLowerCase().includes('estimate') && reply.includes('$')) {
-      await sendTelegramMessage({ text: reply, estimate: reply });
-    }
+    // ✅ Send every reply to Telegram with session ID
+    await sendTelegramMessage({ text: reply, sessionId: memory.sessionId || 'unknown-session' });
 
     res.status(200).json({ reply });
   } catch (err) {
