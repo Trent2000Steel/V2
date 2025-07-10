@@ -1,11 +1,11 @@
-export async function sendToSheet(sessionId, type, content, timestamp) {
-  const webhookURL = 'https://script.google.com/macros/s/AKfycbxnfeVQ4BbmEJv5JzCBjScYKlRr1itE5axjfA9PrNSItAtKMAMSGsvRkC7h6UOlzVdh/exec';
+export async function sendToSheet(sessionId, step, data, timestamp) {
+  const webhookURL = 'https://script.google.com/macros/s/AKfycbwS4xzlsDmwg4ugbPxoKzwABuG9Ofqtap-Ic4qH7MhkQjfZWA7C_mC3gsQ8YJwQv6mu/exec';
 
   const payload = {
     sessionId,
-    type,         // 'message' or 'estimate'
-    content,      // message text or quote string
-    timestamp
+    step,
+    data,
+    timestamp,
   };
 
   try {
