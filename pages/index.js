@@ -29,6 +29,19 @@ export default function Home() {
         <meta name="twitter:title" content="MovingCo — Moving You Can Trust" />
         <meta name="twitter:description" content="We handle your move with care, protection, and a single point of contact." />
         <meta name="twitter:image" content="https://trustmovingco.com/Og-image.png" />
+
+        {/* ✅ Google Analytics */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-JC5ZTSZED2"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-JC5ZTSZED2');
+            `,
+          }}
+        />
       </Head>
 
       <div style={styles.page}>
