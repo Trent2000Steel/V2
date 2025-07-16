@@ -1,14 +1,12 @@
 export default function Header() {
   return (
     <header style={styles.header}>
-      {/* ✅ Left-side guarantee box */}
-      <div style={styles.guarantee}>
-        <div style={styles.guaranteeLine1}>100%</div>
-        <div style={styles.guaranteeLine2}>Money-Back</div>
-        <div style={styles.guaranteeLine3}>Guarantee</div>
+      <div className="moneyBackBox" style={styles.guarantee}>
+        <div style={styles.guaranteeMain}>100%</div>
+        <div>Money-Back</div>
+        <div>Guarantee</div>
       </div>
 
-      {/* ✅ Center logo + tagline */}
       <div style={styles.centerWrap}>
         <div style={styles.titleWrap}>
           <h1 style={styles.logo}>MovingCo</h1>
@@ -18,7 +16,6 @@ export default function Header() {
         </div>
       </div>
 
-      {/* ✅ Right-side flag */}
       <img
         src="/USA.webp"
         alt="USA flag"
@@ -26,6 +23,20 @@ export default function Header() {
         width={48}
         height={48}
       />
+
+      <style jsx>{`
+        @media (max-width: 480px) {
+          .moneyBackBox {
+            width: 76px !important;
+            height: 76px !important;
+            fontSize: 11px !important;
+            padding: 2px !important;
+          }
+          .moneyBackBox div:first-child {
+            font-size: 14px !important;
+          }
+        }
+      `}</style>
     </header>
   );
 }
@@ -97,38 +108,26 @@ const styles = {
   },
   guarantee: {
     position: 'absolute',
-    left: '20px',
+    left: '12px',
     top: '50%',
     transform: 'translateY(-50%)',
-    width: '96px',
-    height: '96px',
-    backgroundColor: '#e0ffe5',
-    border: '2px solid #00aa55',
-    borderRadius: '12px',
+    backgroundColor: '#d1f5d3',
+    border: '2px solid #4caf50',
+    color: '#0a7308',
+    fontWeight: 'bold',
+    fontSize: '12px',
+    borderRadius: '8px',
+    width: '88px',
+    height: '88px',
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
+    padding: '6px',
     fontFamily: 'sans-serif',
-    textAlign: 'center',
-    padding: '4px',
-    boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
+    boxShadow: '0 1px 5px rgba(0,0,0,0.1)',
   },
-  guaranteeLine1: {
-    fontSize: '18px',
-    fontWeight: '800',
-    color: '#00aa55',
-  },
-  guaranteeLine2: {
-    fontSize: '12px',
-    fontWeight: '600',
-    color: '#222',
-    marginTop: '2px',
-  },
-  guaranteeLine3: {
-    fontSize: '12px',
-    fontWeight: '600',
-    color: '#222',
-    marginTop: '-2px',
+  guaranteeMain: {
+    fontSize: '16px',
   },
 };
