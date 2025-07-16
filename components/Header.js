@@ -1,9 +1,19 @@
 export default function Header() {
   return (
     <header style={styles.header}>
+      <div style={styles.leftTagline}>
+        <img
+          src="/movesafe-badge.png"
+          alt="MoveSafe Badge"
+          style={styles.badge}
+        />
+        <span style={styles.tagline}>MoveSafe Verified™</span>
+      </div>
+
       <div style={styles.centerWrap}>
         <h1 style={styles.logo}>MovingCo</h1>
       </div>
+
       <img
         src="/USA.png"
         alt="USA flag"
@@ -49,5 +59,23 @@ const styles = {
     height: '48px',
     width: '48px',
     objectFit: 'contain',
+  },
+  leftTagline: {
+    position: 'absolute',
+    left: '20px',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+  },
+  badge: {
+    height: '32px',
+    width: '32px',
+    objectFit: 'contain',
+  },
+  tagline: {
+    fontSize: '14px',
+    fontWeight: 600,
+    color: '#1e70ff',
+    fontFamily: 'sans-serif',
   },
 };
