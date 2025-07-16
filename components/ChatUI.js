@@ -93,7 +93,7 @@ const styles = {
     border: '1px solid rgba(255,255,255,0.3)',
   },
   userBubble: {
-    backgroundColor: 'rgba(204, 224, 255, 0.6)',
+    backgroundColor: 'rgba(0, 128, 0, 0.5)', // ✅ Green translucent
     alignSelf: 'flex-end',
     border: '1px solid rgba(255,255,255,0.3)',
   },
