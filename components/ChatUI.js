@@ -23,8 +23,8 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     flexGrow: 1,
-    height: '100vh',
-    backgroundImage: 'url(/Background.png)',
+    height: '100%',
+    backgroundImage: 'url("/Background.png")',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
@@ -43,18 +43,16 @@ const styles = {
     padding: '16px',
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: 'transparent',
+    backgroundColor: 'rgba(255, 255, 255, 0)', // Fully transparent
     fontSize: '17px',
     lineHeight: '1.6',
-    fontFamily: '"Inter", sans-serif',
   },
   inputBar: {
     padding: '12px',
     borderTop: '1px solid #ddd',
     display: 'flex',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.8)', // Slight transparency
-    backdropFilter: 'blur(4px)',
+    backgroundColor: 'rgba(255, 255, 255, 0.85)', // Slight transparency
   },
   input: {
     flexGrow: 1,
@@ -63,7 +61,6 @@ const styles = {
     borderRadius: '6px',
     fontSize: '17px',
     marginRight: '8px',
-    fontFamily: '"Inter", sans-serif',
   },
   sendBtn: {
     backgroundColor: '#1e70ff',
@@ -72,7 +69,6 @@ const styles = {
     border: 'none',
     borderRadius: '6px',
     fontWeight: 'bold',
-    fontFamily: '"Inter", sans-serif',
   },
   messageBubble: {
     maxWidth: '80%',
@@ -81,7 +77,6 @@ const styles = {
     marginBottom: '12px',
     position: 'relative',
     fontSize: '17px',
-    fontFamily: '"Inter", sans-serif',
     lineHeight: '1.6',
   },
   assistantBubble: {
@@ -112,7 +107,6 @@ const styles = {
     padding: '8px 14px',
     fontSize: '14px',
     cursor: 'pointer',
-    fontFamily: '"Inter", sans-serif',
     fontWeight: 500,
   },
 };
@@ -129,20 +123,18 @@ export default function ChatUI() {
     if (!existing) {
       sessionStorage.setItem('sessionId', crypto.randomUUID());
     }
-  }, []);
 
-  useEffect(() => {
-    const introDelay = setTimeout(() => {
-      setMessages([
-        {
-          id: 1,
-          role: 'assistant',
-          text: "I’m Max — your MovingCo AI, backed by real humans.\nI’m here to save you from a moving nightmare.\nWhat’s weighing on you most right now?",
-          options: ['Price', 'Damage', 'Timing', 'Just guide me'],
-        }
-      ]);
-    }, 600);
-    return () => clearTimeout(introDelay);
+    // ✅ Immediately show Max's welcome message
+    setMessages([
+      {
+        id: 1,
+        role: 'assistant',
+        text: "I’m Max — your MovingCo AI, backed by real humans.
+I’m here to save you from a moving nightmare.
+What’s weighing on you most right now?",
+        options: ['Price', 'Damage', 'Timing', 'Just guide me'],
+      }
+    ]);
   }, []);
 
   useEffect(() => {
@@ -201,7 +193,6 @@ export default function ChatUI() {
     const userMessage = { id: Date.now(), role: 'user', text: input };
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
-
     notifyTelegram(input, 'user');
 
     const lowerText = input.trim().toLowerCase();
@@ -224,7 +215,6 @@ export default function ChatUI() {
     const userMessage = { id: Date.now(), role: 'user', text: optionText };
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
-
     notifyTelegram(optionText, 'user');
     sendMessageToAPI(updatedMessages.map(m => ({ role: m.role, content: m.text })));
   };
@@ -292,7 +282,6 @@ export default function ChatUI() {
         .typing {
           font-style: italic;
           font-size: 15px;
-          font-family: 'Inter', sans-serif;
         }
         .dot {
           animation: blink 1.2s infinite;
