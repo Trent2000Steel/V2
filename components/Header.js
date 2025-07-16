@@ -1,6 +1,16 @@
 export default function Header() {
   return (
     <header style={styles.header}>
+      {/* Left-side image */}
+      <img
+        src="/Money.webp"
+        alt="Money Back Guarantee"
+        style={styles.money}
+        width={48}
+        height={48}
+      />
+
+      {/* Center title and tagline */}
       <div style={styles.centerWrap}>
         <div style={styles.titleWrap}>
           <h1 style={styles.logo}>MovingCo</h1>
@@ -9,6 +19,8 @@ export default function Header() {
           </span>
         </div>
       </div>
+
+      {/* Right-side flag */}
       <img
         src="/USA.webp"
         alt="USA flag"
@@ -79,6 +91,15 @@ const styles = {
   flag: {
     position: 'absolute',
     right: '20px',
+    top: '50%',
+    transform: 'translateY(-50%)',
+    height: '48px',
+    width: '48px',
+    objectFit: 'contain',
+  },
+  money: {
+    position: 'absolute',
+    left: '20px',
     top: '50%',
     transform: 'translateY(-50%)',
     height: '48px',
