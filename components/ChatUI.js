@@ -118,9 +118,8 @@ export default function ChatUI() {
   const [input, setInput] = useState('');
   const [typing, setTyping] = useState(false);
   const bottomRef = useRef(null);
-  const charCount = useRef(0); // ✅ Track total characters typed
+  const charCount = useRef(0);
 
-  // ✅ Set session ID once
   useEffect(() => {
     const existing = sessionStorage.getItem('sessionId');
     if (!existing) {
@@ -134,7 +133,7 @@ export default function ChatUI() {
         {
           id: 1,
           role: 'assistant',
-          text: "I’m Max — your MovingCo AI trained to save you from a moving nightmare.\nWhat’s weighing on you most right now?",
+          text: "I’m Max — your MovingCo AI, backed by real humans.\nI’m here to save you from a moving nightmare.\nWhat’s weighing on you most right now?",
           options: ['Price', 'Damage', 'Timing', 'Just guide me'],
         }
       ]);
@@ -186,7 +185,7 @@ export default function ChatUI() {
   const handleSend = () => {
     if (!input.trim()) return;
 
-    charCount.current += input.length; // ✅ Track character count
+    charCount.current += input.length;
 
     if (charCount.current >= 100 && !window.__conversionFired) {
       window.gtag('event', 'conversion', {
