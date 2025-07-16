@@ -1,3 +1,4 @@
+// components/ChatUI.js
 import { useEffect, useRef, useState } from 'react';
 import { setCustomerInfo } from '../utils/Memory';
 
@@ -10,7 +11,7 @@ const notifyTelegram = async (text, role = 'user') => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         text: `[${role.toUpperCase()}] ${text}`,
-        sessionId
+        sessionId,
       }),
     });
   } catch (err) {
@@ -24,11 +25,11 @@ const styles = {
     flexDirection: 'column',
     flexGrow: 1,
     height: '100%',
+    fontFamily: '"Inter", sans-serif',
     backgroundImage: 'url("/Background.png")',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
-    fontFamily: '"Inter", sans-serif',
   },
   scrollContainer: {
     flexGrow: 1,
@@ -43,16 +44,17 @@ const styles = {
     padding: '16px',
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: 'rgba(255, 255, 255, 0)', // Fully transparent
+    backgroundColor: 'rgba(255, 255, 255, 0)', // fully transparent
     fontSize: '17px',
     lineHeight: '1.6',
+    fontFamily: '"Inter", sans-serif',
   },
   inputBar: {
     padding: '12px',
     borderTop: '1px solid #ddd',
     display: 'flex',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.85)', // Slight transparency
+    backgroundColor: 'rgba(255, 255, 255, 0.75)', // slightly transparent
   },
   input: {
     flexGrow: 1,
@@ -61,6 +63,7 @@ const styles = {
     borderRadius: '6px',
     fontSize: '17px',
     marginRight: '8px',
+    fontFamily: '"Inter", sans-serif',
   },
   sendBtn: {
     backgroundColor: '#1e70ff',
@@ -69,6 +72,7 @@ const styles = {
     border: 'none',
     borderRadius: '6px',
     fontWeight: 'bold',
+    fontFamily: '"Inter", sans-serif',
   },
   messageBubble: {
     maxWidth: '80%',
@@ -77,6 +81,7 @@ const styles = {
     marginBottom: '12px',
     position: 'relative',
     fontSize: '17px',
+    fontFamily: '"Inter", sans-serif',
     lineHeight: '1.6',
   },
   assistantBubble: {
@@ -107,12 +112,20 @@ const styles = {
     padding: '8px 14px',
     fontSize: '14px',
     cursor: 'pointer',
+    fontFamily: '"Inter", sans-serif',
     fontWeight: 500,
   },
 };
 
 export default function ChatUI() {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([
+    {
+      id: 1,
+      role: 'assistant',
+      text: `I’m Max — your MovingCo AI, backed by real humans.\nI’m here to save you from a moving nightmare.\nWhat’s weighing on you most right now?`,
+      options: ['Price', 'Damage', 'Timing', 'Just guide me'],
+    },
+  ]);
   const [input, setInput] = useState('');
   const [typing, setTyping] = useState(false);
   const bottomRef = useRef(null);
@@ -123,18 +136,6 @@ export default function ChatUI() {
     if (!existing) {
       sessionStorage.setItem('sessionId', crypto.randomUUID());
     }
-
-    // ✅ Immediately show Max's welcome message
-    setMessages([
-      {
-        id: 1,
-        role: 'assistant',
-        text: "I’m Max — your MovingCo AI, backed by real humans.
-I’m here to save you from a moving nightmare.
-What’s weighing on you most right now?",
-        options: ['Price', 'Damage', 'Timing', 'Just guide me'],
-      }
-    ]);
   }, []);
 
   useEffect(() => {
@@ -154,26 +155,26 @@ What’s weighing on you most right now?",
       const data = await response.json();
       setTyping(false);
 
-      setMessages(prev => [
+      setMessages((prev) => [
         ...prev,
         {
           id: Date.now(),
           role: 'assistant',
           text: data.reply || "Sorry, something went wrong.",
-        }
+        },
       ]);
 
       notifyTelegram(data.reply, 'max');
     } catch (error) {
       console.error('API error:', error);
       setTyping(false);
-      setMessages(prev => [
+      setMessages((prev) => [
         ...prev,
         {
           id: Date.now(),
           role: 'assistant',
           text: "Sorry, something went wrong. Try again later.",
-        }
+        },
       ]);
     }
   };
@@ -185,7 +186,7 @@ What’s weighing on you most right now?",
 
     if (charCount.current >= 100 && !window.__conversionFired) {
       window.gtag('event', 'conversion', {
-        send_to: 'AW-17246682774/GEHpC1XPxvTaEJb9729A'
+        send_to: 'AW-17246682774/GEHpC1XPxvTaEJb9729A',
       });
       window.__conversionFired = true;
     }
@@ -193,6 +194,7 @@ What’s weighing on you most right now?",
     const userMessage = { id: Date.now(), role: 'user', text: input };
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
+
     notifyTelegram(input, 'user');
 
     const lowerText = input.trim().toLowerCase();
@@ -208,15 +210,16 @@ What’s weighing on you most right now?",
     }
 
     setInput('');
-    sendMessageToAPI(updatedMessages.map(m => ({ role: m.role, content: m.text })));
+    sendMessageToAPI(updatedMessages.map((m) => ({ role: m.role, content: m.text })));
   };
 
   const handleOptionClick = (optionText) => {
     const userMessage = { id: Date.now(), role: 'user', text: optionText };
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
+
     notifyTelegram(optionText, 'user');
-    sendMessageToAPI(updatedMessages.map(m => ({ role: m.role, content: m.text })));
+    sendMessageToAPI(updatedMessages.map((m) => ({ role: m.role, content: m.text })));
   };
 
   const handleKeyDown = (e) => {
@@ -231,10 +234,13 @@ What’s weighing on you most right now?",
       <div style={styles.scrollContainer}>
         <div style={styles.chatScrollArea}>
           {messages.map((msg) => (
-            <div key={msg.id} style={{
-              ...styles.messageBubble,
-              ...(msg.role === 'user' ? styles.userBubble : styles.assistantBubble),
-            }}>
+            <div
+              key={msg.id}
+              style={{
+                ...styles.messageBubble,
+                ...(msg.role === 'user' ? styles.userBubble : styles.assistantBubble),
+              }}
+            >
               {msg.text.split('\n').map((line, i) => (
                 <div key={i}>{line}</div>
               ))}
@@ -253,14 +259,21 @@ What’s weighing on you most right now?",
               )}
               {msg.id !== 1 && (
                 <div style={styles.timestamp}>
-                  {new Date(msg.id).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  {new Date(msg.id).toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
                 </div>
               )}
             </div>
           ))}
           {typing && (
             <div style={{ ...styles.messageBubble, ...styles.assistantBubble }}>
-              <span className="typing">Max is typing<span className="dot">.</span><span className="dot">.</span><span className="dot">.</span></span>
+              <span className="typing">
+                Max is typing<span className="dot">.</span>
+                <span className="dot">.</span>
+                <span className="dot">.</span>
+              </span>
             </div>
           )}
           <div ref={bottomRef} />
@@ -275,13 +288,16 @@ What’s weighing on you most right now?",
           placeholder="Type a message"
           style={styles.input}
         />
-        <button onClick={handleSend} style={styles.sendBtn}>Send</button>
+        <button onClick={handleSend} style={styles.sendBtn}>
+          Send
+        </button>
       </div>
 
       <style jsx>{`
         .typing {
           font-style: italic;
           font-size: 15px;
+          font-family: 'Inter', sans-serif;
         }
         .dot {
           animation: blink 1.2s infinite;
@@ -293,8 +309,14 @@ What’s weighing on you most right now?",
           animation-delay: 0.4s;
         }
         @keyframes blink {
-          0%, 80%, 100% { opacity: 0; }
-          40% { opacity: 1; }
+          0%,
+          80%,
+          100% {
+            opacity: 0;
+          }
+          40% {
+            opacity: 1;
+          }
         }
       `}</style>
     </div>
