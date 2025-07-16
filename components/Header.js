@@ -1,18 +1,14 @@
 export default function Header() {
   return (
     <header style={styles.header}>
-      <div style={styles.leftTagline}>
-        <div style={styles.badge}>✓</div>
-        <span style={styles.tagline}>MoveSafe Verified™</span>
-      </div>
-
       <div style={styles.centerWrap}>
         <div style={styles.titleWrap}>
           <h1 style={styles.logo}>MovingCo</h1>
-          <span style={styles.mobileTagline}>MoveSafe Verified™</span>
+          <span style={styles.tagline}>
+            <span style={styles.badge}>✓</span> MoveSafe Verified™
+          </span>
         </div>
       </div>
-
       <img
         src="/USA.png"
         alt="USA flag"
@@ -26,7 +22,7 @@ export default function Header() {
 
 const styles = {
   header: {
-    height: '72px',
+    height: '92px',
     backgroundColor: '#ffffff',
     borderBottom: '1px solid #e0e0e0',
     display: 'flex',
@@ -40,12 +36,14 @@ const styles = {
     position: 'relative',
     flex: 1,
     display: 'flex',
-    justifyContent: 'center',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
   titleWrap: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    lineHeight: 1.1,
   },
   logo: {
     fontSize: '24px',
@@ -55,11 +53,28 @@ const styles = {
     fontFamily: 'sans-serif',
     userSelect: 'none',
   },
-  mobileTagline: {
-    fontSize: '12px',
+  tagline: {
+    fontSize: '13px',
     fontWeight: 600,
     color: '#1e70ff',
-    display: 'none',
+    marginTop: '4px',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '6px',
+    fontFamily: 'sans-serif',
+  },
+  badge: {
+    backgroundColor: '#1e70ff',
+    color: '#ffffff',
+    fontWeight: 'bold',
+    borderRadius: '50%',
+    width: '16px',
+    height: '16px',
+    fontSize: '12px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    boxShadow: '0 1px 4px rgba(0,0,0,0.2)',
   },
   flag: {
     position: 'absolute',
@@ -70,50 +85,4 @@ const styles = {
     width: '48px',
     objectFit: 'contain',
   },
-  leftTagline: {
-    position: 'absolute',
-    left: '20px',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-  },
-  badge: {
-    backgroundColor: '#1e70ff',
-    color: '#fff',
-    fontWeight: 'bold',
-    borderRadius: '50%',
-    width: '22px',
-    height: '22px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: '14px',
-    boxShadow: '0 2px 6px rgba(0, 0, 0, 0.2)',
-  },
-  tagline: {
-    fontSize: '14px',
-    fontWeight: 600,
-    color: '#1e70ff',
-    fontFamily: 'sans-serif',
-    display: 'block',
-  },
 };
-
-// Add this CSS to your global stylesheet or inline style block:
-const mobileStyle = `
-  @media (max-width: 480px) {
-    .leftTagline {
-      display: none !important;
-    }
-    .mobileTagline {
-      display: block !important;
-    }
-  }
-`;
-
-// Inject into <style> at the top of your app:
-if (typeof document !== 'undefined') {
-  const styleTag = document.createElement('style');
-  styleTag.innerHTML = mobileStyle;
-  document.head.appendChild(styleTag);
-}
