@@ -2,11 +2,7 @@ export default function Header() {
   return (
     <header style={styles.header}>
       <div style={styles.leftTagline}>
-        <img
-          src="/movesafe-badge.png"
-          alt="MoveSafe Badge"
-          style={styles.badge}
-        />
+        <div style={styles.badge}>✓</div>
         <span style={styles.tagline}>MoveSafe Verified™</span>
       </div>
 
@@ -68,9 +64,17 @@ const styles = {
     gap: '8px',
   },
   badge: {
-    height: '32px',
-    width: '32px',
-    objectFit: 'contain',
+    backgroundColor: '#1e70ff',
+    color: '#fff',
+    fontWeight: 'bold',
+    borderRadius: '50%',
+    width: '22px',
+    height: '22px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '14px',
+    boxShadow: '0 2px 6px rgba(0, 0, 0, 0.2)',
   },
   tagline: {
     fontSize: '14px',
