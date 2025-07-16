@@ -83,13 +83,16 @@ const styles = {
     fontSize: '17px',
     fontFamily: '"Inter", sans-serif',
     lineHeight: '1.6',
+    backdropFilter: 'blur(8px)',
+    boxShadow: '0 3px 8px rgba(0,0,0,0.08)',
+    border: '1px solid rgba(255,255,255,0.3)',
   },
   assistantBubble: {
-    backgroundColor: '#e6e6e6',
+    backgroundColor: 'rgba(240,240,240,0.65)',
     alignSelf: 'flex-start',
   },
   userBubble: {
-    backgroundColor: '#cce0ff',
+    backgroundColor: 'rgba(204,224,255,0.7)',
     alignSelf: 'flex-end',
   },
   timestamp: {
