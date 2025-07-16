@@ -7,7 +7,10 @@ export default function Header() {
       </div>
 
       <div style={styles.centerWrap}>
-        <h1 style={styles.logo}>MovingCo</h1>
+        <div style={styles.titleWrap}>
+          <h1 style={styles.logo}>MovingCo</h1>
+          <span style={styles.mobileTagline}>MoveSafe Verified™</span>
+        </div>
       </div>
 
       <img
@@ -39,6 +42,11 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
   },
+  titleWrap: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
   logo: {
     fontSize: '24px',
     fontWeight: 800,
@@ -46,6 +54,12 @@ const styles = {
     margin: 0,
     fontFamily: 'sans-serif',
     userSelect: 'none',
+  },
+  mobileTagline: {
+    fontSize: '12px',
+    fontWeight: 600,
+    color: '#1e70ff',
+    display: 'none',
   },
   flag: {
     position: 'absolute',
@@ -81,5 +95,25 @@ const styles = {
     fontWeight: 600,
     color: '#1e70ff',
     fontFamily: 'sans-serif',
+    display: 'block',
   },
 };
+
+// Add this CSS to your global stylesheet or inline style block:
+const mobileStyle = `
+  @media (max-width: 480px) {
+    .leftTagline {
+      display: none !important;
+    }
+    .mobileTagline {
+      display: block !important;
+    }
+  }
+`;
+
+// Inject into <style> at the top of your app:
+if (typeof document !== 'undefined') {
+  const styleTag = document.createElement('style');
+  styleTag.innerHTML = mobileStyle;
+  document.head.appendChild(styleTag);
+}
