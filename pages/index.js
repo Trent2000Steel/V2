@@ -9,10 +9,9 @@ export default function Home() {
       <Head>
         <title>MovingCo — Moving You Can Trust</title>
         <meta name="description" content="Flat Rate Pricing. No Money Down. Real Human Help." />
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
-        />
+
+        {/* ✅ Fixed viewport meta tag for accessibility */}
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
 
         {/* ✅ Favicon */}
         <link rel="icon" type="image/png" href="/Favicon.png" />
