@@ -10,7 +10,7 @@ export default function Header() {
         </div>
       </div>
       <img
-        src="/USA.png"
+        src="/USA.webp"
         alt="USA flag"
         style={styles.flag}
         width={48}
