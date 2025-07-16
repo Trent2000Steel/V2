@@ -1,16 +1,14 @@
 export default function Header() {
   return (
     <header style={styles.header}>
-      {/* Left-side image */}
-      <img
-        src="/Money.webp"
-        alt="Money Back Guarantee"
-        style={styles.money}
-        width={48}
-        height={48}
-      />
+      {/* ✅ Left-side guarantee box */}
+      <div style={styles.guarantee}>
+        <div style={styles.guaranteeLine1}>100%</div>
+        <div style={styles.guaranteeLine2}>Money-Back</div>
+        <div style={styles.guaranteeLine3}>Guarantee</div>
+      </div>
 
-      {/* Center title and tagline */}
+      {/* ✅ Center logo + tagline */}
       <div style={styles.centerWrap}>
         <div style={styles.titleWrap}>
           <h1 style={styles.logo}>MovingCo</h1>
@@ -20,7 +18,7 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Right-side flag */}
+      {/* ✅ Right-side flag */}
       <img
         src="/USA.webp"
         alt="USA flag"
@@ -97,13 +95,40 @@ const styles = {
     width: '48px',
     objectFit: 'contain',
   },
-  money: {
+  guarantee: {
     position: 'absolute',
     left: '20px',
     top: '50%',
     transform: 'translateY(-50%)',
-    height: '48px',
-    width: '48px',
-    objectFit: 'contain',
+    width: '96px',
+    height: '96px',
+    backgroundColor: '#e0ffe5',
+    border: '2px solid #00aa55',
+    borderRadius: '12px',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontFamily: 'sans-serif',
+    textAlign: 'center',
+    padding: '4px',
+    boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
+  },
+  guaranteeLine1: {
+    fontSize: '18px',
+    fontWeight: '800',
+    color: '#00aa55',
+  },
+  guaranteeLine2: {
+    fontSize: '12px',
+    fontWeight: '600',
+    color: '#222',
+    marginTop: '2px',
+  },
+  guaranteeLine3: {
+    fontSize: '12px',
+    fontWeight: '600',
+    color: '#222',
+    marginTop: '-2px',
   },
 };
