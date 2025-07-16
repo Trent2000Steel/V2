@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { setCustomerInfo } from '../utils/Memory';
 
-// ✅ Telegram notify helper
 const notifyTelegram = async (text, role = 'user') => {
   try {
     const sessionId = sessionStorage.getItem('sessionId') || 'unknown';
@@ -24,7 +23,9 @@ const styles = {
     flexDirection: 'column',
     flexGrow: 1,
     height: '100%',
-    backgroundColor: '#fff',
+    backgroundImage: 'url("/Background.png")',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
     fontFamily: '"Inter", sans-serif',
   },
   scrollContainer: {
@@ -33,6 +34,7 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     minHeight: 0,
+    backgroundColor: 'rgba(255,255,255,0.9)',
   },
   chatScrollArea: {
     flexGrow: 1,
@@ -40,10 +42,8 @@ const styles = {
     padding: '16px',
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: '#f9f9f9',
     fontSize: '17px',
     lineHeight: '1.6',
-    fontFamily: '"Inter", sans-serif',
   },
   inputBar: {
     padding: '12px',
@@ -59,7 +59,6 @@ const styles = {
     borderRadius: '6px',
     fontSize: '17px',
     marginRight: '8px',
-    fontFamily: '"Inter", sans-serif',
   },
   sendBtn: {
     backgroundColor: '#1e70ff',
@@ -68,7 +67,6 @@ const styles = {
     border: 'none',
     borderRadius: '6px',
     fontWeight: 'bold',
-    fontFamily: '"Inter", sans-serif',
   },
   messageBubble: {
     maxWidth: '80%',
@@ -77,7 +75,6 @@ const styles = {
     marginBottom: '12px',
     position: 'relative',
     fontSize: '17px',
-    fontFamily: '"Inter", sans-serif',
     lineHeight: '1.6',
   },
   assistantBubble: {
@@ -108,7 +105,6 @@ const styles = {
     padding: '8px 14px',
     fontSize: '14px',
     cursor: 'pointer',
-    fontFamily: '"Inter", sans-serif',
     fontWeight: 500,
   },
 };
