@@ -44,7 +44,7 @@ const styles = {
     padding: '16px',
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: 'rgba(255, 255, 255, 0)', // fully transparent
+    backgroundColor: 'rgba(255, 255, 255, 0)',
     fontSize: '17px',
     lineHeight: '1.6',
     fontFamily: '"Inter", sans-serif',
@@ -54,7 +54,7 @@ const styles = {
     borderTop: '1px solid #ddd',
     display: 'flex',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.75)', // slightly transparent
+    backgroundColor: 'rgba(255, 255, 255, 0.75)',
   },
   input: {
     flexGrow: 1,
@@ -83,17 +83,19 @@ const styles = {
     fontSize: '17px',
     fontFamily: '"Inter", sans-serif',
     lineHeight: '1.6',
-    backdropFilter: 'blur(8px)',
-    boxShadow: '0 3px 8px rgba(0,0,0,0.08)',
-    border: '1px solid rgba(255,255,255,0.3)',
+    backdropFilter: 'blur(4px)',
+    WebkitBackdropFilter: 'blur(4px)',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
   },
   assistantBubble: {
-    backgroundColor: 'rgba(240,240,240,0.65)',
+    backgroundColor: 'rgba(230, 230, 230, 0.65)',
     alignSelf: 'flex-start',
+    border: '1px solid rgba(255,255,255,0.3)',
   },
   userBubble: {
-    backgroundColor: 'rgba(204,224,255,0.7)',
+    backgroundColor: 'rgba(204, 224, 255, 0.6)',
     alignSelf: 'flex-end',
+    border: '1px solid rgba(255,255,255,0.3)',
   },
   timestamp: {
     fontSize: '10px',
