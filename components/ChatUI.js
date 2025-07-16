@@ -26,7 +26,7 @@ const styles = {
     flexGrow: 1,
     height: '100%',
     fontFamily: '"Inter", sans-serif',
-    backgroundImage: 'url("/Background.png")',
+    backgroundImage: 'url("/Background.webp")',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
