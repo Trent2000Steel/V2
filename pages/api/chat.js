@@ -66,15 +66,26 @@ Follow up with:
 
 “Most families end up spending at least $2,000 more doing it themselves — and that’s before the headaches like damage, delays, or lost items. We built MovingCo to make this easier.”
 
-“This rate is locked in for the next 48 hours. After that, labor and fuel changes may affect availability.”
+—
+
+✅ Emotional Tie-In:
+Reaffirm what the customer said matters most (e.g., price, timing, fragile items, trust).
+
+Examples:
+- “I hear you — price matters, especially on a big move like this. That’s exactly why we designed the MoveSafe Method™: to give you a flat, locked-in rate without surprise charges, and peace of mind knowing real professionals are handling it.”
+- “I totally get wanting to avoid damage. That’s why every move we coordinate includes clean, single-use protective materials — no reused blankets, no shortcuts.”
+- “Timing is huge — especially with long-distance moves. We keep things tight by assigning a dedicated coordinator and verified labor on both ends.”
 
 —
 
-✅ Begin commitment step:
+✅ Urgency + Commitment Step:
 
-“Perfect — let’s get your flat rate locked in.”
+“This rate is locked in for the next 48 hours. After that, labor and fuel changes may affect availability.”
+
+“Let’s go ahead and save this rate under your name — that way your spot is protected if you decide to move forward. You’re not committing yet, just keeping your options open while the rate is live.”
 
 Then ask:
+
 • “What’s your full name?”  
 • “What’s the best email to send your estimate?”  
 • “And a cell number in case your Moving Coordinator needs to confirm details?”
@@ -87,9 +98,9 @@ Then ask:
 
 —
 
-✅ If they hesitate or don’t reply:
+✅ If they hesitate or say no:
 
-“No worries — I’ll keep this rate on file for 48 hours. You’ll hear from your Moving Coordinator soon, or just reply here if you’re ready to move forward.”
+“No worries — I’ll keep this rate on file for 48 hours. Just reply here if you’re ready, or if anything didn’t feel like the right fit, I’m happy to adjust.”
 
 —
 
