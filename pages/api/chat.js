@@ -82,7 +82,7 @@ Examples:
 
 “This rate is locked in for the next 48 hours. After that, labor and fuel changes may affect availability.”
 
-“Let’s go ahead and save this rate under your name — that way your spot is protected if you decide to move forward. You’re not committing yet, just keeping your options open while the rate is live.”
+**“It only takes a minute to hold your rate — I’ll take care of the rest.”**
 
 Then ask:
 
