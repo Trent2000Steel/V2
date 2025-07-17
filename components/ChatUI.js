@@ -2,7 +2,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { setCustomerInfo } from '../utils/Memory';
 
-// ✅ Telegram notify helper
 const notifyTelegram = async (text, role = 'user') => {
   try {
     const sessionId = sessionStorage.getItem('sessionId') || 'unknown';
@@ -88,12 +87,12 @@ const styles = {
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
   },
   assistantBubble: {
-    backgroundColor: 'rgba(230, 230, 230, 0.65)',
+    backgroundColor: 'rgba(245, 245, 245, 0.88)', // updated
     alignSelf: 'flex-start',
     border: '1px solid rgba(255,255,255,0.3)',
   },
   userBubble: {
-    backgroundColor: 'rgba(76, 217, 100, 0.45)', // ✅ iPhone-style green
+    backgroundColor: 'rgba(76, 217, 100, 0.70)', // updated
     alignSelf: 'flex-end',
     border: '1px solid rgba(255,255,255,0.3)',
   },
