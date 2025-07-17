@@ -29,7 +29,7 @@ export default function Home() {
         <meta name="twitter:description" content="We handle your move with care, protection, and a single point of contact." />
         <meta name="twitter:image" content="https://trustmovingco.com/Og-image.png" />
 
-        {/* ✅ Google Analytics */}
+        {/* ✅ Google Analytics (GA4) */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-JC5ZTSZED2"></script>
         <script
           dangerouslySetInnerHTML={{
@@ -38,6 +38,19 @@ export default function Home() {
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
               gtag('config', 'G-JC5ZTSZED2');
+            `,
+          }}
+        />
+
+        {/* ✅ Google Ads conversion tracking (AW tag) */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17246682774"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'AW-17246682774');
             `,
           }}
         />
