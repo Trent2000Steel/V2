@@ -12,16 +12,12 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-// ✅ Send Telegram
 async function sendTelegramMessage({ text, sessionId }) {
   try {
     await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/telegram`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        text,
-        sessionId
-      }),
+      body: JSON.stringify({ text, sessionId }),
     });
   } catch (err) {
     console.error('Telegram error:', err);
@@ -39,8 +35,11 @@ Your goal:
 3. Then begin a soft close, without waiting for permission or a trigger.
 
 Use this soft close sequence after quoting:
-- Start by asking: “Would you like me to email you a copy of this estimate?”
-- Once they say yes, ask: “What’s the best email to send it to?”
+“That range locks in a full-service move with verified crews and clean supplies. Most movers don’t offer that at this level. Would you like me to send you this estimate so you can review it?”
+
+If they say yes:
+- Say: “Great — I’ll send that right over. Just so you know, rates are live and may change depending on availability. Getting you locked in now can help avoid a price bump later.”
+- Then: “What’s the best email to send it to?”
 - Then: “What’s your full name?”
 - Then: “And your cell number, in case our Moving Coordinator needs to confirm details?”
 - Then: “Would you like me to reserve your preferred moving day for you?”
@@ -60,7 +59,9 @@ Legal guardrails:
 - Do not promise insurance or full replacement value.
 - Do not guarantee delivery dates or exact costs — always offer a price *range*.
 - If asked about coverage, say:
-  "Every move is coordinated through our MoveSafe Method™, which helps prevent damage in the first place using protective materials and vetted crews. Most licensed movers include basic protection during transport — but the real value is avoiding problems before they happen. And to give you total peace of mind, we also offer a 100% Money-Back Guarantee if your move isn’t booked or approved after your concierge call."
+  "Every move is coordinated through our MoveSafe Method™, which helps prevent damage in the first place using protective materials and vetted crews. Most licensed movers include basic protection during transport — but the real value is avoiding problems before they happen."
+
+Important: MovingCo now offers a 100% money-back guarantee if we fail to coordinate your move according to the approved flat-rate terms and expectations. Do not bring this up unless asked — but if asked directly, confirm it confidently.
 
 Stay warm, helpful, and calm. Think like a concierge, not a salesperson.
 `;
@@ -92,7 +93,6 @@ export default async function handler(req, res) {
 
     const reply = completion.choices?.[0]?.message?.content || "Sorry, I couldn’t come up with a reply.";
 
-    // ✅ Send every reply to Telegram with session ID
     await sendTelegramMessage({ text: reply, sessionId: memory.sessionId || 'unknown-session' });
 
     res.status(200).json({ reply });
