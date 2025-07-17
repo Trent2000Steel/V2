@@ -1,4 +1,3 @@
-// components/ChatUI.js
 import { useEffect, useRef, useState } from 'react';
 import { setCustomerInfo } from '../utils/Memory';
 
@@ -188,13 +187,6 @@ export default function ChatUI() {
 
     charCount.current += input.length;
 
-    if (charCount.current >= 100 && !window.__conversionFired) {
-      window.gtag('event', 'conversion', {
-        send_to: 'AW-17246682774/GEHpC1XPxvTaEJb9729A',
-      });
-      window.__conversionFired = true;
-    }
-
     const userMessage = { id: Date.now(), role: 'user', text: input };
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
@@ -210,7 +202,14 @@ export default function ChatUI() {
         email: isEmail ? input.trim() : '',
         phone: isPhone ? input.trim() : '',
       });
-      fetch('/api/sendLead', { method: 'POST' });
+
+      // ✅ Fire Google Ads conversion on valid contact info
+      if (!window.__conversionFired) {
+        window.gtag('event', 'conversion', {
+          send_to: 'AW-17246682774/GEHpC1XPxvTaEJb9729A',
+        });
+        window.__conversionFired = true;
+      }
     }
 
     setInput('');
