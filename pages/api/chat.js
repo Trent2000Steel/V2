@@ -1,3 +1,29 @@
+import OpenAI from 'openai';
+import {
+  getMemory,
+  updateMemory,
+  saveQuote
+} from '../../utils/Memory';
+import rateLimit from '../../utils/rateLimit';
+
+const limiter = rateLimit({ interval: 60000, uniqueTokenPerInterval: 500 });
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+async function sendTelegramMessage({ text, sessionId }) {
+  try {
+    await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/telegram`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text, sessionId }),
+    });
+  } catch (err) {
+    console.error('Telegram error:', err);
+  }
+}
+
 const systemPrompt = `
 You are Max — the AI representative for MovingCo, a long-distance moving coordination service founded by a military logistics expert who saw firsthand how painful and untrustworthy moving can be.
 
@@ -84,3 +110,39 @@ Legal guardrails:
 
 Do not be pushy. Think like a concierge, not a salesperson.
 `;
+
+export default async function handler(req, res) {
+  try {
+    await limiter.check(res, 5, 'CACHE_TOKEN');
+  } catch {
+    return res.status(429).json({ error: 'Too many requests. Please wait and try again.' });
+  }
+
+  if (!process.env.OPENAI_API_KEY) {
+    return res.status(500).json({ error: 'Missing OpenAI API key' });
+  }
+
+  const { messages } = req.body;
+  messages.forEach(m => updateMemory({ role: m.role, content: m.content }));
+  const memory = getMemory();
+
+  try {
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-4-turbo',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        ...messages,
+      ],
+      temperature: 0.8,
+    });
+
+    const reply = completion.choices?.[0]?.message?.content || "Sorry, I couldn’t come up with a reply.";
+
+    await sendTelegramMessage({ text: reply, sessionId: memory.sessionId || 'unknown-session' });
+
+    res.status(200).json({ reply });
+  } catch (err) {
+    console.error('OpenAI error:', err);
+    res.status(500).json({ error: 'OpenAI request failed.' });
+  }
+}
