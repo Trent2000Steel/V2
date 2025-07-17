@@ -87,12 +87,12 @@ const styles = {
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
   },
   assistantBubble: {
-    backgroundColor: 'rgba(245, 245, 245, 0.88)', // updated
+    backgroundColor: 'rgba(245, 245, 245, 0.88)',
     alignSelf: 'flex-start',
     border: '1px solid rgba(255,255,255,0.3)',
   },
   userBubble: {
-    backgroundColor: 'rgba(76, 217, 100, 0.70)', // updated
+    backgroundColor: 'rgba(76, 217, 100, 0.70)',
     alignSelf: 'flex-end',
     border: '1px solid rgba(255,255,255,0.3)',
   },
@@ -217,9 +217,14 @@ export default function ChatUI() {
     sendMessageToAPI(updatedMessages.map((m) => ({ role: m.role, content: m.text })));
   };
 
-  const handleOptionClick = (optionText) => {
+  const handleOptionClick = (optionText, messageId) => {
     const userMessage = { id: Date.now(), role: 'user', text: optionText };
-    const updatedMessages = [...messages, userMessage];
+    const updatedMessages = [
+      ...messages.map((m) =>
+        m.id === messageId ? { ...m, options: null } : m
+      ),
+      userMessage,
+    ];
     setMessages(updatedMessages);
 
     notifyTelegram(optionText, 'user');
@@ -254,7 +259,7 @@ export default function ChatUI() {
                     <button
                       key={idx}
                       style={styles.optionButton}
-                      onClick={() => handleOptionClick(opt)}
+                      onClick={() => handleOptionClick(opt, msg.id)}
                     >
                       {opt}
                     </button>
