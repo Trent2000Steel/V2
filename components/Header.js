@@ -2,9 +2,8 @@ export default function Header() {
   return (
     <header style={styles.header}>
       <div className="moneyBackBox" style={styles.guarantee}>
-        <div style={styles.guaranteeMain}>100%</div>
-        <div>Money-Back</div>
-        <div>Guarantee</div>
+        <div style={styles.guaranteeMain}>Satisfaction</div>
+        <div>Guaranteed</div>
       </div>
 
       <div style={styles.centerWrap}>
@@ -29,11 +28,11 @@ export default function Header() {
           .moneyBackBox {
             width: 76px !important;
             height: 76px !important;
-            fontSize: 11px !important;
+            font-size: 11px !important;
             padding: 2px !important;
           }
           .moneyBackBox div:first-child {
-            font-size: 14px !important;
+            font-size: 12px !important;
           }
         }
       `}</style>
@@ -128,6 +127,8 @@ const styles = {
     boxShadow: '0 1px 5px rgba(0,0,0,0.1)',
   },
   guaranteeMain: {
-    fontSize: '16px',
+    fontSize: '14px',
+    lineHeight: '1.1',
+    textAlign: 'center',
   },
 };
