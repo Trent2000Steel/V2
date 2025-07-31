@@ -125,8 +125,14 @@ export default function ChatUI() {
     {
       id: 1,
       role: 'assistant',
-      text: `I’m Max — your MovingCo AI, backed by real humans.\nI’m here to save you from a moving nightmare.\nWhat’s weighing on you most right now?`,
-      options: ['Price', 'Damage', 'Timing', 'Just guide me'],
+      text: `No forms. No waiting. No spam.\nJust a real quote — right here, right now.\nLet’s start simple:\n\nHow much do you think your move should cost?`,
+      options: [
+        '$1,000–$2,000',
+        '$2,000–$3,000',
+        '$3,000–$4,000',
+        '$4,000+',
+        'No idea — just help me out'
+      ],
     },
   ]);
   const [input, setInput] = useState('');
