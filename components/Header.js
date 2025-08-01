@@ -10,12 +10,13 @@ export default function Header() {
         <div style={styles.titleWrap}>
           <h1 style={styles.logo}>MovingCo</h1>
           <div style={styles.taglineWrap}>
-            <span style={styles.tagline}>
-              <span style={styles.badge}>✓</span> MoveSafe Verified™
-            </span>
-            <span style={styles.subtext}>
+            <div style={styles.tagline}>
+              <span style={styles.badge}>✓</span>
+              <span>MoveSafe Verified™</span>
+            </div>
+            <div style={styles.subtext}>
               Full-service long distance moving — from anywhere in the U.S.
-            </span>
+            </div>
           </div>
         </div>
       </div>
@@ -85,12 +86,12 @@ const styles = {
     userSelect: 'none',
   },
   tagline: {
-    fontSize: '13px',
-    fontWeight: 600,
-    color: '#1e70ff',
     display: 'flex',
     alignItems: 'center',
     gap: '6px',
+    fontSize: '13px',
+    fontWeight: 600,
+    color: '#1e70ff',
     fontFamily: 'sans-serif',
   },
   subtext: {
@@ -101,6 +102,7 @@ const styles = {
     fontFamily: 'sans-serif',
     textAlign: 'center',
     maxWidth: '280px',
+    lineHeight: '1.2',
   },
   badge: {
     backgroundColor: '#1e70ff',
