@@ -1,48 +1,49 @@
 export default function Header() {
   return (
-    <header style={styles.header}>
-      <div className="moneyBackBox" style={styles.guarantee}>
-        <div style={styles.guaranteeMain}>Satisfaction</div>
-        <div>Guaranteed</div>
-      </div>
+    <>
+      <header style={styles.header}>
+        <div className="moneyBackBox" style={styles.guarantee}>
+          <div style={styles.guaranteeMain}>Satisfaction</div>
+          <div>Guaranteed</div>
+        </div>
 
-      <div style={styles.centerWrap}>
-        <div style={styles.titleWrap}>
-          <h1 style={styles.logo}>MovingCo</h1>
-          <div style={styles.taglineWrap}>
+        <div style={styles.centerWrap}>
+          <div style={styles.titleWrap}>
+            <h1 style={styles.logo}>MovingCo</h1>
             <div style={styles.tagline}>
-              <span style={styles.badge}>✓</span>
-              <span>MoveSafe Verified™</span>
-            </div>
-            <div style={styles.subtext}>
-              Full-service long distance moving — from anywhere in the U.S.
+              <span style={styles.badge}>✓</span> MoveSafe Verified™
             </div>
           </div>
         </div>
+
+        <img
+          src="/USA.webp"
+          alt="USA flag"
+          style={styles.flag}
+          width={48}
+          height={48}
+        />
+
+        <style jsx>{`
+          @media (max-width: 480px) {
+            .moneyBackBox {
+              width: 76px !important;
+              height: 76px !important;
+              font-size: 11px !important;
+              padding: 2px !important;
+            }
+            .moneyBackBox div:first-child {
+              font-size: 12px !important;
+            }
+          }
+        `}</style>
+      </header>
+
+      {/* Trust line below the header */}
+      <div style={styles.trustLine}>
+        Full-service long distance moving — from anywhere in the U.S.
       </div>
-
-      <img
-        src="/USA.webp"
-        alt="USA flag"
-        style={styles.flag}
-        width={48}
-        height={48}
-      />
-
-      <style jsx>{`
-        @media (max-width: 480px) {
-          .moneyBackBox {
-            width: 76px !important;
-            height: 76px !important;
-            font-size: 11px !important;
-            padding: 2px !important;
-          }
-          .moneyBackBox div:first-child {
-            font-size: 12px !important;
-          }
-        }
-      `}</style>
-    </header>
+    </>
   );
 }
 
@@ -71,12 +72,6 @@ const styles = {
     alignItems: 'center',
     lineHeight: 1.1,
   },
-  taglineWrap: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    marginTop: '4px',
-  },
   logo: {
     fontSize: '24px',
     fontWeight: 800,
@@ -86,23 +81,14 @@ const styles = {
     userSelect: 'none',
   },
   tagline: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '6px',
     fontSize: '13px',
     fontWeight: 600,
     color: '#1e70ff',
-    fontFamily: 'sans-serif',
-  },
-  subtext: {
-    fontSize: '13px',
-    fontWeight: 500,
-    color: '#555',
     marginTop: '4px',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '6px',
     fontFamily: 'sans-serif',
-    textAlign: 'center',
-    maxWidth: '280px',
-    lineHeight: '1.2',
   },
   badge: {
     backgroundColor: '#1e70ff',
@@ -151,5 +137,15 @@ const styles = {
     fontSize: '14px',
     lineHeight: '1.1',
     textAlign: 'center',
+  },
+  trustLine: {
+    fontSize: '13px',
+    fontWeight: 500,
+    color: '#444',
+    textAlign: 'center',
+    padding: '8px 16px',
+    fontFamily: 'sans-serif',
+    borderBottom: '1px solid #eee',
+    backgroundColor: '#fafafa',
   },
 };
