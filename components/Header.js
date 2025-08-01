@@ -9,12 +9,14 @@ export default function Header() {
       <div style={styles.centerWrap}>
         <div style={styles.titleWrap}>
           <h1 style={styles.logo}>MovingCo</h1>
-          <span style={styles.tagline}>
-            <span style={styles.badge}>✓</span> MoveSafe Verified™
-          </span>
-          <span style={styles.subtext}>
-            Full-service long distance moving — from anywhere in the U.S.
-          </span>
+          <div style={styles.taglineWrap}>
+            <span style={styles.tagline}>
+              <span style={styles.badge}>✓</span> MoveSafe Verified™
+            </span>
+            <span style={styles.subtext}>
+              Full-service long distance moving — from anywhere in the U.S.
+            </span>
+          </div>
         </div>
       </div>
 
@@ -68,6 +70,12 @@ const styles = {
     alignItems: 'center',
     lineHeight: 1.1,
   },
+  taglineWrap: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginTop: '4px',
+  },
   logo: {
     fontSize: '24px',
     fontWeight: 800,
@@ -80,7 +88,6 @@ const styles = {
     fontSize: '13px',
     fontWeight: 600,
     color: '#1e70ff',
-    marginTop: '4px',
     display: 'flex',
     alignItems: 'center',
     gap: '6px',
