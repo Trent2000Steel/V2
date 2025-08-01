@@ -125,13 +125,13 @@ export default function ChatUI() {
     {
       id: 1,
       role: 'assistant',
-      text: `No forms. No hassle.\nJust a personalized estimate from a team that handles everything for you.\n\nLet’s start with a quick question — what price range were you hoping for?`,
+      text: `No forms. No hassle.\nJust a personalized estimate from a team who cares.\n\nLet’s start with a quick question — what price range were you hoping for?`,
       options: [
         '$1,000–$2,000',
         '$2,000–$3,000',
         '$3,000–$4,000',
         '$4,000+',
-        'No idea — just help me out'
+        'Not sure — show me what it usually costs'
       ],
     },
   ]);
