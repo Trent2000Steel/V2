@@ -12,6 +12,9 @@ export default function Header() {
           <span style={styles.tagline}>
             <span style={styles.badge}>✓</span> MoveSafe Verified™
           </span>
+          <span style={styles.subtext}>
+            Full-service long distance moving — from anywhere in the U.S.
+          </span>
         </div>
       </div>
 
@@ -82,6 +85,15 @@ const styles = {
     alignItems: 'center',
     gap: '6px',
     fontFamily: 'sans-serif',
+  },
+  subtext: {
+    fontSize: '13px',
+    fontWeight: 500,
+    color: '#555',
+    marginTop: '4px',
+    fontFamily: 'sans-serif',
+    textAlign: 'center',
+    maxWidth: '280px',
   },
   badge: {
     backgroundColor: '#1e70ff',
