@@ -125,7 +125,7 @@ export default function ChatUI() {
     {
       id: 1,
       role: 'assistant',
-      text: `No forms. No hassle.\nJust a personalized estimate from a team who cares.\n\nLet’s start with a quick question — what price range were you hoping for?`,
+      text: `No forms. No hassle.\nJust a personalized long distance moving estimate from a team who cares.\n\nLet’s start with a quick question — How much do you think your move should cost?`,
       options: [
         '$1,000–$2,000',
         '$2,000–$3,000',
