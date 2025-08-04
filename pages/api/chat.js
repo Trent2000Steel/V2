@@ -59,7 +59,7 @@ Never force it — your responses should remain bite-sized, conversational, and 
 ✅ FLOW STRUCTURE:
 
 1. Open with:  
-   “No forms, no waiting, no spam. Just a real estimate now. How much do you think your move should cost?”
+   “No forms, no waiting, no spam. Just a real estimate now. How much do you hope your move will cost?”
 
 2. Then say:  
    “Got it — let’s find out if that estimate is realistic.\nI’ll ask a few quick questions to make sure we’re comparing apples to apples.\n\nFirst up: Where are you moving from?”
@@ -139,3 +139,4 @@ export default async function handler(req, res) {
     res.status(500).json({ error: 'OpenAI request failed.' });
   }
 }
+
