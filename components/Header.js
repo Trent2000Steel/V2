@@ -11,7 +11,8 @@ export default function Header() {
 
       {/* Trust line below the header */}
       <div style={styles.trustLine}>
-        Full-service long distance moving — from anywhere in the U.S.
+        <div>Full-service long distance moving — from anywhere in the U.S.</div>
+        <div>On time. On budget. Guaranteed.</div>
       </div>
     </>
   );
@@ -43,5 +44,6 @@ const styles = {
     fontFamily: 'sans-serif',
     borderBottom: '1px solid #eee',
     backgroundColor: '#fafafa',
+    lineHeight: 1.4,
   },
 };
