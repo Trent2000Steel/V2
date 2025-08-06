@@ -17,25 +17,6 @@ const notifyTelegram = async (text, role = 'user') => {
   }
 };
 
-const triggerButtons = [
-  {
-    trigger: /when.*move|move date|planning to move/i,
-    options: ['This week', 'Next 1–2 weeks', '3+ weeks out'],
-  },
-  {
-    trigger: /type.*home|moving from/i,
-    options: ['Home', 'Apartment', 'Storage unit'],
-  },
-  {
-    trigger: /how many.*bedrooms|home size/i,
-    options: ['1 bedroom', '2 bedrooms', '3+ bedrooms'],
-  },
-  {
-    trigger: /stairs|any stairs/i,
-    options: ['Yes — stairs at pickup or dropoff', 'No stairs involved'],
-  },
-];
-
 const styles = {
   wrapper: {
     display: 'flex',
@@ -120,23 +101,6 @@ const styles = {
     marginTop: '4px',
     textAlign: 'right',
   },
-  optionsContainer: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: '8px',
-    marginTop: '8px',
-  },
-  optionButton: {
-    backgroundColor: '#1e70ff',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '20px',
-    padding: '8px 14px',
-    fontSize: '14px',
-    cursor: 'pointer',
-    fontFamily: '"Inter", sans-serif',
-    fontWeight: 500,
-  },
 };
 
 export default function ChatUI() {
@@ -144,13 +108,7 @@ export default function ChatUI() {
     {
       id: 1,
       role: 'assistant',
-      text: `Welcome to The Move Experience™.\n\nI’m Max, your MovingCo AI coordinator. Let’s get you an accurate estimate.\n\nTo start, what level of service are you interested in?`,
-      options: [
-        'Basic move — budget friendly',
-        'Full service — load, transport, unload',
-        'White glove — includes packing too',
-        'Not sure — just guide me',
-      ],
+      text: `Welcome to The Move Experience™.\n\nI’m Max, your MovingCo AI coordinator. Let’s get you an accurate estimate.\n\nTo start, what level of service are you interested in?\n\n• Basic\n• Full Service\n• White Glove\n• Not sure yet`,
     },
   ]);
   const [input, setInput] = useState('');
@@ -182,28 +140,14 @@ export default function ChatUI() {
       const data = await response.json();
       setTyping(false);
 
-      const text = data.reply || 'Sorry, something went wrong.';
-      let options = data.options || null;
-
-      // Frontend-based button injection if none sent from backend
-      if (!options) {
-        for (const rule of triggerButtons) {
-          if (rule.trigger.test(text)) {
-            options = rule.options;
-            break;
-          }
-        }
-      }
-
       const newMessage = {
         id: Date.now(),
         role: 'assistant',
-        text,
-        ...(options ? { options } : {}),
+        text: data.text || 'Sorry, something went wrong.',
       };
 
       setMessages((prev) => [...prev, newMessage]);
-      notifyTelegram(text, 'max');
+      notifyTelegram(data.text, 'max');
     } catch (error) {
       console.error('API error:', error);
       setTyping(false);
@@ -250,18 +194,6 @@ export default function ChatUI() {
     sendMessageToAPI(updatedMessages.map((m) => ({ role: m.role, content: m.text })));
   };
 
-  const handleOptionClick = (optionText, messageId) => {
-    const userMessage = { id: Date.now(), role: 'user', text: optionText };
-    const updatedMessages = messages.map((m) =>
-      m.id === messageId ? { ...m, options: null } : m
-    );
-    const finalMessages = [...updatedMessages, userMessage];
-
-    setMessages(finalMessages);
-    notifyTelegram(optionText, 'user');
-    sendMessageToAPI(finalMessages.map((m) => ({ role: m.role, content: m.text })));
-  };
-
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -284,19 +216,6 @@ export default function ChatUI() {
               {msg.text.split('\n').map((line, i) => (
                 <div key={i}>{line}</div>
               ))}
-              {msg.options && (
-                <div style={styles.optionsContainer}>
-                  {msg.options.map((opt, idx) => (
-                    <button
-                      key={idx}
-                      style={styles.optionButton}
-                      onClick={() => handleOptionClick(opt, msg.id)}
-                    >
-                      {opt}
-                    </button>
-                  ))}
-                </div>
-              )}
               {msg.id !== 1 && (
                 <div style={styles.timestamp}>
                   {new Date(msg.id).toLocaleTimeString([], {
