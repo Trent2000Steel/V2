@@ -93,7 +93,6 @@ export default async function handler(req, res) {
     await sendTelegramMessage({ text: reply, sessionId: memory.sessionId || 'unknown-session' });
 
     res.status(200).json({
-      id: Date.now(),
       role: 'assistant',
       text: reply
     });
