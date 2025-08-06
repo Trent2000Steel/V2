@@ -75,6 +75,10 @@ export default async function handler(req, res) {
   }
 
   const { messages } = req.body;
+  if (!messages || !Array.isArray(messages)) {
+    return res.status(400).json({ error: 'Missing or invalid messages array in request body.' });
+  }
+
   messages.forEach(m => updateMemory({ role: m.role, content: m.content }));
   const memory = getMemory();
 
@@ -88,7 +92,10 @@ export default async function handler(req, res) {
       temperature: 0.8,
     });
 
-    const reply = completion.choices?.[0]?.message?.content || "Sorry, I couldn’t come up with a reply.";
+    let reply = "Sorry, I couldn’t come up with a reply.";
+    if (completion?.choices && completion.choices[0]?.message?.content) {
+      reply = completion.choices[0].message.content;
+    }
 
     await sendTelegramMessage({ text: reply, sessionId: memory.sessionId || 'unknown-session' });
 
