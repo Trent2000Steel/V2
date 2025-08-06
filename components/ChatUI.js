@@ -1,3 +1,5 @@
+// Updated ChatUI.js with dynamic button rendering for Steps 2–5
+
 import { useEffect, useRef, useState } from 'react';
 import { setCustomerInfo } from '../utils/Memory';
 
@@ -15,6 +17,13 @@ const notifyTelegram = async (text, role = 'user') => {
   } catch (err) {
     console.error('Telegram error:', err);
   }
+};
+
+const buttonPresets = {
+  2: ['Home', 'Apartment', 'Storage Unit'],
+  3: ['Studio / 1 Bedroom', '2 Bedrooms', '3+ Bedrooms'],
+  4: ['This week', 'Next 1–2 weeks', '3+ weeks out'],
+  5: ['Yes — fragile or valuable', 'No — standard stuff'],
 };
 
 const styles = {
@@ -163,12 +172,16 @@ export default function ChatUI() {
       const data = await response.json();
       setTyping(false);
 
+      const stepId = messages.length + 1;
+      const options = buttonPresets[stepId] || null;
+
       setMessages((prev) => [
         ...prev,
         {
           id: Date.now(),
           role: 'assistant',
           text: data.reply || "Sorry, something went wrong.",
+          options,
         },
       ]);
 
