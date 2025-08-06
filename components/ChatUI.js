@@ -17,6 +17,25 @@ const notifyTelegram = async (text, role = 'user') => {
   }
 };
 
+const triggerButtons = [
+  {
+    trigger: /when.*move|move date|planning to move/i,
+    options: ['This week', 'Next 1–2 weeks', '3+ weeks out'],
+  },
+  {
+    trigger: /type.*home|moving from/i,
+    options: ['Home', 'Apartment', 'Storage unit'],
+  },
+  {
+    trigger: /how many.*bedrooms|home size/i,
+    options: ['1 bedroom', '2 bedrooms', '3+ bedrooms'],
+  },
+  {
+    trigger: /stairs|any stairs/i,
+    options: ['Yes — stairs at pickup or dropoff', 'No stairs involved'],
+  },
+];
+
 const styles = {
   wrapper: {
     display: 'flex',
@@ -163,15 +182,28 @@ export default function ChatUI() {
       const data = await response.json();
       setTyping(false);
 
+      const text = data.reply || 'Sorry, something went wrong.';
+      let options = data.options || null;
+
+      // Frontend-based button injection if none sent from backend
+      if (!options) {
+        for (const rule of triggerButtons) {
+          if (rule.trigger.test(text)) {
+            options = rule.options;
+            break;
+          }
+        }
+      }
+
       const newMessage = {
         id: Date.now(),
         role: 'assistant',
-        text: data.reply || 'Sorry, something went wrong.',
-        ...(data.options ? { options: data.options } : {}),
+        text,
+        ...(options ? { options } : {}),
       };
 
       setMessages((prev) => [...prev, newMessage]);
-      notifyTelegram(data.reply, 'max');
+      notifyTelegram(text, 'max');
     } catch (error) {
       console.error('API error:', error);
       setTyping(false);
@@ -317,9 +349,7 @@ export default function ChatUI() {
           animation-delay: 0.4s;
         }
         @keyframes blink {
-          0%,
-          80%,
-          100% {
+          0%, 80%, 100% {
             opacity: 0;
           }
           40% {
