@@ -101,6 +101,23 @@ const styles = {
     marginTop: '4px',
     textAlign: 'right',
   },
+  optionsContainer: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: '8px',
+    marginTop: '8px',
+  },
+  optionButton: {
+    backgroundColor: '#1e70ff',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '20px',
+    padding: '8px 14px',
+    fontSize: '14px',
+    cursor: 'pointer',
+    fontFamily: '"Inter", sans-serif',
+    fontWeight: 500,
+  },
 };
 
 export default function ChatUI() {
@@ -108,7 +125,7 @@ export default function ChatUI() {
     {
       id: 1,
       role: 'assistant',
-      text: `Welcome to The Move Experience™.\n\nI’m Max, your MovingCo AI coordinator. Let’s get you an accurate estimate.\n\nTo start, what level of service are you interested in?\n\n• Basic\n• Full Service\n• White Glove\n• Not sure yet`,
+      text: `Welcome to The Move Experience™.\n\nI’m Max, your MovingCo AI coordinator. Let’s get you an accurate estimate.\n\nTo start, what level of service are you interested in?`,
     },
   ]);
   const [input, setInput] = useState('');
@@ -194,6 +211,18 @@ export default function ChatUI() {
     sendMessageToAPI(updatedMessages.map((m) => ({ role: m.role, content: m.text })));
   };
 
+  const handleOptionClick = (optionText, messageId) => {
+    const userMessage = { id: Date.now(), role: 'user', text: optionText };
+    const updatedMessages = messages.map((m) =>
+      m.id === messageId ? { ...m, options: null } : m
+    );
+    const finalMessages = [...updatedMessages, userMessage];
+
+    setMessages(finalMessages);
+    notifyTelegram(optionText, 'user');
+    sendMessageToAPI(finalMessages.map((m) => ({ role: m.role, content: m.text })));
+  };
+
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -201,31 +230,76 @@ export default function ChatUI() {
     }
   };
 
+  const getOptionsForStep = () => {
+    const userSteps = messages.filter((m) => m.role === 'user').length;
+
+    if (messages[0] && messages[0].id === 1) {
+      return [
+        'Basic move — budget friendly',
+        'Full service — load, transport, unload',
+        'White glove — includes packing too',
+        'Not sure — just guide me',
+      ];
+    }
+
+    switch (userSteps) {
+      case 1:
+        return ['This week', 'Next 1–2 weeks', '3+ weeks out'];
+      case 2:
+        return ['Home', 'Apartment', 'Storage unit'];
+      case 3:
+        return ['1 bedroom', '2 bedrooms', '3+ bedrooms'];
+      case 4:
+        return ['Yes — stairs at pickup or dropoff', 'No stairs involved'];
+      default:
+        return null;
+    }
+  };
+
   return (
     <div style={styles.wrapper}>
       <div style={styles.scrollContainer}>
         <div style={styles.chatScrollArea}>
-          {messages.map((msg) => (
-            <div
-              key={msg.id}
-              style={{
-                ...styles.messageBubble,
-                ...(msg.role === 'user' ? styles.userBubble : styles.assistantBubble),
-              }}
-            >
-              {msg.text.split('\n').map((line, i) => (
-                <div key={i}>{line}</div>
-              ))}
-              {msg.id !== 1 && (
-                <div style={styles.timestamp}>
-                  {new Date(msg.id).toLocaleTimeString([], {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}
-                </div>
-              )}
-            </div>
-          ))}
+          {messages.map((msg, index) => {
+            const options = msg.id === 1 || msg.role === 'assistant'
+              ? getOptionsForStep()
+              : null;
+
+            return (
+              <div
+                key={msg.id}
+                style={{
+                  ...styles.messageBubble,
+                  ...(msg.role === 'user' ? styles.userBubble : styles.assistantBubble),
+                }}
+              >
+                {msg.text.split('\n').map((line, i) => (
+                  <div key={i}>{line}</div>
+                ))}
+                {options && (
+                  <div style={styles.optionsContainer}>
+                    {options.map((opt, idx) => (
+                      <button
+                        key={idx}
+                        style={styles.optionButton}
+                        onClick={() => handleOptionClick(opt, msg.id)}
+                      >
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+                )}
+                {msg.id !== 1 && (
+                  <div style={styles.timestamp}>
+                    {new Date(msg.id).toLocaleTimeString([], {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
+                  </div>
+                )}
+              </div>
+            );
+          })}
           {typing && (
             <div style={{ ...styles.messageBubble, ...styles.assistantBubble }}>
               <span className="typing">
@@ -268,7 +342,9 @@ export default function ChatUI() {
           animation-delay: 0.4s;
         }
         @keyframes blink {
-          0%, 80%, 100% {
+          0%,
+          80%,
+          100% {
             opacity: 0;
           }
           40% {
