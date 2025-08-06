@@ -125,7 +125,7 @@ export default function ChatUI() {
     {
       id: 1,
       role: 'assistant',
-      text: `Welcome to The Move Experience™.\n\nI’m Max, your MovingCo AI coordinator. Let’s get you an accurate estimate.\n\nTo start, what level of service are you interested in?`,
+      text: `Most moves feel rushed and chaotic — but the right plan changes everything.\n\nI’m Max, your MovingCo AI coordinator. I’ll guide you through this step by step so nothing gets missed.\n\nTo start, what level of service are you interested in?`,
       options: [
         'Basic move — budget friendly',
         'Full service — load, transport, unload',
