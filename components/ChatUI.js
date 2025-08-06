@@ -125,13 +125,12 @@ export default function ChatUI() {
     {
       id: 1,
       role: 'assistant',
-      text: `No forms. No hassle.\nJust a personalized long distance moving estimate from a team who cares.\n\nLet’s start with a quick question — How much do you think your move should cost?`,
+      text: `Welcome to The Move Experience™.\n\nI’m Max, your MovingCo AI coordinator. Let’s get you an accurate estimate.\n\nTo start, what level of service are you interested in?`,
       options: [
-        '$1,000–$2,000',
-        '$2,000–$3,000',
-        '$3,000–$4,000',
-        '$4,000+',
-        'Not sure — show me what it usually costs'
+        'Basic move — budget friendly',
+        'Full service — load, transport, unload',
+        'White glove — includes packing too',
+        'Not sure — just guide me',
       ],
     },
   ]);
@@ -209,7 +208,6 @@ export default function ChatUI() {
         phone: isPhone ? input.trim() : '',
       });
 
-      // ✅ Fire Google Ads conversion on valid contact info
       if (!window.__conversionFired) {
         window.gtag('event', 'conversion', {
           send_to: 'AW-17246682774/GEHpC1XPxvTaEJb9729A',
