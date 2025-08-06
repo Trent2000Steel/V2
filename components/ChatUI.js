@@ -126,6 +126,12 @@ export default function ChatUI() {
       id: 1,
       role: 'assistant',
       text: `Welcome to The Move Experience™.\n\nI’m Max, your MovingCo AI coordinator. Let’s get you an accurate estimate.\n\nTo start, what level of service are you interested in?`,
+      options: [
+        'Basic move — budget friendly',
+        'Full service — load, transport, unload',
+        'White glove — includes packing too',
+        'Not sure — just guide me',
+      ],
     },
   ]);
   const [input, setInput] = useState('');
@@ -230,76 +236,44 @@ export default function ChatUI() {
     }
   };
 
-  const getOptionsForStep = () => {
-    const userSteps = messages.filter((m) => m.role === 'user').length;
-
-    if (messages[0] && messages[0].id === 1) {
-      return [
-        'Basic move — budget friendly',
-        'Full service — load, transport, unload',
-        'White glove — includes packing too',
-        'Not sure — just guide me',
-      ];
-    }
-
-    switch (userSteps) {
-      case 1:
-        return ['This week', 'Next 1–2 weeks', '3+ weeks out'];
-      case 2:
-        return ['Home', 'Apartment', 'Storage unit'];
-      case 3:
-        return ['1 bedroom', '2 bedrooms', '3+ bedrooms'];
-      case 4:
-        return ['Yes — stairs at pickup or dropoff', 'No stairs involved'];
-      default:
-        return null;
-    }
-  };
-
   return (
     <div style={styles.wrapper}>
       <div style={styles.scrollContainer}>
         <div style={styles.chatScrollArea}>
-          {messages.map((msg, index) => {
-            const options = msg.id === 1 || msg.role === 'assistant'
-              ? getOptionsForStep()
-              : null;
-
-            return (
-              <div
-                key={msg.id}
-                style={{
-                  ...styles.messageBubble,
-                  ...(msg.role === 'user' ? styles.userBubble : styles.assistantBubble),
-                }}
-              >
-                {msg.text.split('\n').map((line, i) => (
-                  <div key={i}>{line}</div>
-                ))}
-                {options && (
-                  <div style={styles.optionsContainer}>
-                    {options.map((opt, idx) => (
-                      <button
-                        key={idx}
-                        style={styles.optionButton}
-                        onClick={() => handleOptionClick(opt, msg.id)}
-                      >
-                        {opt}
-                      </button>
-                    ))}
-                  </div>
-                )}
-                {msg.id !== 1 && (
-                  <div style={styles.timestamp}>
-                    {new Date(msg.id).toLocaleTimeString([], {
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}
-                  </div>
-                )}
-              </div>
-            );
-          })}
+          {messages.map((msg) => (
+            <div
+              key={msg.id}
+              style={{
+                ...styles.messageBubble,
+                ...(msg.role === 'user' ? styles.userBubble : styles.assistantBubble),
+              }}
+            >
+              {msg.text.split('\n').map((line, i) => (
+                <div key={i}>{line}</div>
+              ))}
+              {msg.id === 1 && msg.options && (
+                <div style={styles.optionsContainer}>
+                  {msg.options.map((opt, idx) => (
+                    <button
+                      key={idx}
+                      style={styles.optionButton}
+                      onClick={() => handleOptionClick(opt, msg.id)}
+                    >
+                      {opt}
+                    </button>
+                  ))}
+                </div>
+              )}
+              {msg.id !== 1 && (
+                <div style={styles.timestamp}>
+                  {new Date(msg.id).toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                </div>
+              )}
+            </div>
+          ))}
           {typing && (
             <div style={{ ...styles.messageBubble, ...styles.assistantBubble }}>
               <span className="typing">
