@@ -52,15 +52,15 @@ We don’t guarantee exact pricing or delivery dates — we coordinate top-tier 
 2. Collect:
    - Where from (city + state)
    - Where to
-   - Move date (button options)
-   - Type of home (home, apartment, storage) with size buttons
+   - Move date
+   - Type of home (home, apartment, storage) with size
    - Any stairs?
    - Any special/fragile items?
 3. Then: ask for name and cell/email to personalize and hold quote.
 4. Then: Show estimate range.
 5. Then: Offer to create a MovingCo login to save it and get next steps.
 
-Use buttons when helpful (move date, home size, stairs). Keep everything short, warm, and personal.
+Use buttons when helpful (move date, home size, stairs) — but those are handled by frontend. Backend sends only text. Keep everything short, warm, and personal.
 `;
 
 export default async function handler(req, res) {
@@ -90,33 +90,13 @@ export default async function handler(req, res) {
 
     const reply = completion.choices?.[0]?.message?.content || "Sorry, I couldn’t come up with a reply.";
 
-    // STEP BUTTON INJECTION LOGIC
-    let options = null;
-    const stepCount = messages.filter(m => m.role === 'user').length;
-
-    if (stepCount === 1) {
-      options = null; // already handled on frontend
-    } else if (stepCount === 2) {
-      options = ['This week', 'Next 1–2 weeks', '3+ weeks out'];
-    } else if (stepCount === 3) {
-      options = ['Home', 'Apartment', 'Storage unit'];
-    } else if (stepCount === 4) {
-      options = ['1 bedroom', '2 bedrooms', '3+ bedrooms'];
-    } else if (stepCount === 5) {
-      options = ['Yes — stairs at pickup or dropoff', 'No stairs involved'];
-    }
-
-    const assistantMessage = {
-      id: Date.now(),
-      role: 'assistant',
-      text: reply,
-    };
-
-    if (options) assistantMessage.options = options;
-
     await sendTelegramMessage({ text: reply, sessionId: memory.sessionId || 'unknown-session' });
 
-    res.status(200).json(assistantMessage);
+    res.status(200).json({
+      id: Date.now(),
+      role: 'assistant',
+      text: reply
+    });
   } catch (err) {
     console.error('OpenAI error:', err);
     res.status(500).json({ error: 'OpenAI request failed.' });
