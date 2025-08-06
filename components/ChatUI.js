@@ -1,5 +1,3 @@
-// Updated ChatUI.js with dynamic button rendering for Steps 2–5
-
 import { useEffect, useRef, useState } from 'react';
 import { setCustomerInfo } from '../utils/Memory';
 
@@ -17,13 +15,6 @@ const notifyTelegram = async (text, role = 'user') => {
   } catch (err) {
     console.error('Telegram error:', err);
   }
-};
-
-const buttonPresets = {
-  2: ['Home', 'Apartment', 'Storage Unit'],
-  3: ['Studio / 1 Bedroom', '2 Bedrooms', '3+ Bedrooms'],
-  4: ['This week', 'Next 1–2 weeks', '3+ weeks out'],
-  5: ['Yes — fragile or valuable', 'No — standard stuff'],
 };
 
 const styles = {
@@ -172,19 +163,14 @@ export default function ChatUI() {
       const data = await response.json();
       setTyping(false);
 
-      const stepId = messages.length + 1;
-      const options = buttonPresets[stepId] || null;
+      const newMessage = {
+        id: Date.now(),
+        role: 'assistant',
+        text: data.reply || 'Sorry, something went wrong.',
+        ...(data.options ? { options: data.options } : {}),
+      };
 
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: Date.now(),
-          role: 'assistant',
-          text: data.reply || "Sorry, something went wrong.",
-          options,
-        },
-      ]);
-
+      setMessages((prev) => [...prev, newMessage]);
       notifyTelegram(data.reply, 'max');
     } catch (error) {
       console.error('API error:', error);
@@ -194,7 +180,7 @@ export default function ChatUI() {
         {
           id: Date.now(),
           role: 'assistant',
-          text: "Sorry, something went wrong. Try again later.",
+          text: 'Sorry, something went wrong. Try again later.',
         },
       ]);
     }
@@ -204,7 +190,6 @@ export default function ChatUI() {
     if (!input.trim()) return;
 
     charCount.current += input.length;
-
     const userMessage = { id: Date.now(), role: 'user', text: input };
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
@@ -235,16 +220,14 @@ export default function ChatUI() {
 
   const handleOptionClick = (optionText, messageId) => {
     const userMessage = { id: Date.now(), role: 'user', text: optionText };
-    const updatedMessages = [
-      ...messages.map((m) =>
-        m.id === messageId ? { ...m, options: null } : m
-      ),
-      userMessage,
-    ];
-    setMessages(updatedMessages);
+    const updatedMessages = messages.map((m) =>
+      m.id === messageId ? { ...m, options: null } : m
+    );
+    const finalMessages = [...updatedMessages, userMessage];
 
+    setMessages(finalMessages);
     notifyTelegram(optionText, 'user');
-    sendMessageToAPI(updatedMessages.map((m) => ({ role: m.role, content: m.text })));
+    sendMessageToAPI(finalMessages.map((m) => ({ role: m.role, content: m.text })));
   };
 
   const handleKeyDown = (e) => {
