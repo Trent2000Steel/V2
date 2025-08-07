@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 
-// ✅ Curated trust messages with icons
 const TRUST_MESSAGES = [
   { icon: "📦", text: "38 moves coordinated in the past 7 days" },
   { icon: "✅", text: "12 new bookings confirmed today" },
@@ -33,7 +32,6 @@ const TRUST_MESSAGES = [
   { icon: "🚚", text: "Fleet-ready. Route-optimized. On time." }
 ];
 
-// 🔁 Shuffle once per session
 function shuffleArray(array) {
   return [...array].sort(() => Math.random() - 0.5);
 }
@@ -49,14 +47,14 @@ export default function LiveTrustStatus() {
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % shuffled.length);
-    }, 8000); // 8 seconds per rotation
+    }, 8000);
     return () => clearInterval(interval);
   }, [shuffled]);
 
   if (!shuffled.length) return null;
 
   return (
-    <div style={{ ...styles.wrapper, ...styles.fade }}>
+    <div style={styles.wrapper}>
       <span style={styles.icon}>{shuffled[index].icon}</span>
       <span style={styles.text}>{shuffled[index].text}</span>
     </div>
@@ -74,15 +72,14 @@ const styles = {
     fontWeight: 500,
     color: '#222',
     padding: '10px 20px',
-    margin: '6px auto 0',
+    margin: '0 auto',               // 🔧 removed top/bottom spacing
     maxWidth: '95%',
     background: 'rgba(255, 255, 255, 0.7)',
     borderRadius: '10px',
     boxShadow: '0 1px 6px rgba(0, 0, 0, 0.08)',
-    transition: 'opacity 0.6s ease-in-out',
-    minHeight: '38px',
     backdropFilter: 'blur(4px)',
     textAlign: 'center',
+    minHeight: '38px',
   },
   icon: {
     fontSize: '18px',
@@ -91,7 +88,4 @@ const styles = {
   text: {
     lineHeight: '1.6',
   },
-  fade: {
-    animation: 'fadeInOut 8s infinite',
-  }
 };
