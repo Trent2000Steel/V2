@@ -35,7 +35,7 @@ Your job is to:
 
 ❗ SALES PSYCHOLOGY RULES (must follow these at all times):
 —————————————————————————————————————
-1. Start each message with one relevant point from the MoveSafe Method™ that applies to what the user just shared.
+1. Every message must begin with ONE relevant benefit from the MoveSafe Method™ that directly ties to what the user just shared.
 2. Keep replies short, helpful, and conversational — no fluff.
 3. Ask only one question at a time to keep the conversation focused.
 4. End every message with a soft next-step question (a micro-close).
@@ -120,3 +120,4 @@ export default async function handler(req, res) {
     res.status(500).json({ error: 'OpenAI request failed.' });
   }
 }
+
