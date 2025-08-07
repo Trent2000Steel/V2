@@ -1,19 +1,12 @@
 export default function Header() {
   return (
-    <>
-      <header style={styles.header}>
-        <img
-          src="/Pix88.webp"
-          alt="MovingCo logo"
-          style={styles.logoImg}
-        />
-      </header>
-
-      {/* Trust line below the header */}
-      <div style={styles.trustLine}>
-        Full-service long distance moving — from anywhere in the U.S.
-      </div>
-    </>
+    <header style={styles.header}>
+      <img
+        src="/Pix88.webp"
+        alt="MovingCo logo"
+        style={styles.logoImg}
+      />
+    </header>
   );
 }
 
@@ -33,15 +26,5 @@ const styles = {
     height: '64px',
     objectFit: 'contain',
     userSelect: 'none',
-  },
-  trustLine: {
-    fontSize: '13px',
-    fontWeight: 500,
-    color: '#444',
-    textAlign: 'center',
-    padding: '8px 16px',
-    fontFamily: 'sans-serif',
-    borderBottom: '1px solid #eee',
-    backgroundColor: '#fafafa',
-  },
+  }
 };
