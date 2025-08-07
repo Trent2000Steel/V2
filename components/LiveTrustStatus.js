@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 
-// 📦 Curated trust messages with icons
+// ✅ Curated trust messages with icons
 const TRUST_MESSAGES = [
-  // 🟦 Live Activity
   { icon: "📦", text: "38 moves coordinated in the past 7 days" },
   { icon: "✅", text: "12 new bookings confirmed today" },
   { icon: "🚛", text: "3 cross-country moves picked up this morning" },
@@ -13,8 +12,6 @@ const TRUST_MESSAGES = [
   { icon: "📑", text: "5 families finalized their quote this morning" },
   { icon: "📈", text: "Midweek bookings are surging — 40+ this week already" },
   { icon: "🗺️", text: "4 back-to-back moves routed through Texas today" },
-
-  // 🟦 Consistency & Scale
   { icon: "📊", text: "150+ moves coordinated monthly on average" },
   { icon: "🏠", text: "Over 1,800 families relocated nationwide" },
   { icon: "🧳", text: "Moves scheduled into November and beyond" },
@@ -25,8 +22,6 @@ const TRUST_MESSAGES = [
   { icon: "⏱️", text: "Most customers reserve within 48 hours" },
   { icon: "🛡️", text: "Flat-rate pricing — no surprises" },
   { icon: "⭐", text: "Rated 4.9 out of 5 by verified customers" },
-
-  // 🟦 Trust & Professionalism
   { icon: "🙋", text: "Live support from real humans — not just AI" },
   { icon: "🔒", text: "Licensed carriers. Verified movers. Protected quotes." },
   { icon: "🧠", text: "Every quote is reviewed by a human" },
@@ -76,17 +71,17 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     gap: '8px',
-    background: '#f8f8f8',
+    background: '#f0f7ff', // 🔵 subtle blue background for trust
     borderRadius: '6px',
-    padding: '6px 12px',
-    fontSize: '13px',
+    padding: '8px 14px',
+    fontSize: '15px', // ⬆️ Increased for legibility
     fontWeight: '500',
-    color: '#444',
-    minHeight: '28px',
+    color: '#333',
+    minHeight: '32px',
     textAlign: 'center',
-    marginBottom: '8px',
+    lineHeight: '1.4',
   },
   icon: {
-    fontSize: '15px',
+    fontSize: '16px',
   }
 };
