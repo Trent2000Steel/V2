@@ -12,19 +12,20 @@ export default function Header() {
 
 const styles = {
   header: {
-    height: '80px', // ⬅️ Reduced from 92px
-    backgroundColor: '#ffffff',
-    borderBottom: 'none', // ⬅️ Removed the line
+    height: '76px',                    // ⬇️ Reduced overall height
+    backgroundColor: '#ffffff',       // ✅ Clean white background
+    borderBottom: 'none',             // 🚫 Removes grey line
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     position: 'sticky',
     top: 0,
     zIndex: 1000,
-    paddingBottom: '4px', // ⬅️ Small tweak to bring it closer to trust text
+    paddingBottom: '0',               // ⬇️ Pulls trust bar closer
+    marginBottom: '-4px',             // ⬇️ Tighter spacing to next element
   },
   logoImg: {
-    height: '60px', // ⬅️ Slightly reduced
+    height: '64px',
     objectFit: 'contain',
     userSelect: 'none',
   }
