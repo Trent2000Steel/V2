@@ -1,82 +1,92 @@
 import { useEffect, useState } from 'react';
 
-// Curated trust lines (rotated randomly per session)
+// 📦 Curated trust messages with icons
 const TRUST_MESSAGES = [
-  // 📦 Live Activity
-  "38 moves coordinated in the past 7 days",
-  "12 new bookings confirmed today",
-  "3 cross-country moves picked up this morning",
-  "Over 4,200 miles scheduled for transport this week",
-  "2 piano moves and 6 senior relocations booked today",
-  "Teams are currently active in 9 different states",
-  "Pickup routes are being dispatched hourly",
-  "5 families finalized their long-distance quote this morning",
-  "Midweek bookings are surging — 40+ this week already",
-  "4 back-to-back moves routed through Texas today",
+  // 🟦 Live Activity
+  { icon: "📦", text: "38 moves coordinated in the past 7 days" },
+  { icon: "✅", text: "12 new bookings confirmed today" },
+  { icon: "🚛", text: "3 cross-country moves picked up this morning" },
+  { icon: "🧭", text: "Over 4,200 miles scheduled for transport this week" },
+  { icon: "🎹", text: "2 piano moves and 6 senior relocations booked today" },
+  { icon: "🌎", text: "Teams are currently active in 9 different states" },
+  { icon: "📍", text: "Pickup routes are being dispatched hourly" },
+  { icon: "📑", text: "5 families finalized their quote this morning" },
+  { icon: "📈", text: "Midweek bookings are surging — 40+ this week already" },
+  { icon: "🗺️", text: "4 back-to-back moves routed through Texas today" },
 
-  // 🔁 Consistency & Scale
-  "150+ moves coordinated monthly on average",
-  "We’ve helped over 1,800 families relocate nationwide",
-  "Coordinating moves across 20+ states each month",
-  "High-volume weeks? We’re built for them.",
-  "Moves scheduled into November and beyond",
-  "Fleet-ready and route-planned seven days a week",
-  "30–40 families trust us every week to move them long-distance",
+  // 🟦 Consistency & Scale
+  { icon: "📊", text: "150+ moves coordinated monthly on average" },
+  { icon: "🏠", text: "Over 1,800 families relocated nationwide" },
+  { icon: "🧳", text: "Moves scheduled into November and beyond" },
+  { icon: "📦", text: "30–40 families trust us every week" },
+  { icon: "📅", text: "August is 88% booked — limited availability" },
+  { icon: "📅", text: "September is filling faster than projected" },
+  { icon: "⚠️", text: "High-demand routes are closing out early" },
+  { icon: "⏱️", text: "Most customers reserve within 48 hours" },
+  { icon: "🛡️", text: "Flat-rate pricing — no surprises" },
+  { icon: "⭐", text: "Rated 4.9 out of 5 by verified customers" },
 
-  // 🚨 Urgency & Demand
-  "August is 88% booked — limited availability",
-  "September is filling faster than projected",
-  "Weekend slots go first — ask about weekdays",
-  "High-demand routes are closing out early",
-  "Most customers reserve their move within 48 hours of quoting",
-  "Preferred pickup windows book out 7–14 days in advance",
-
-  // ⭐ Reviews / Confidence
-  "Rated 4.9 out of 5 by verified customers",
-  "No bait-and-switch pricing — every quote is manually reviewed",
-  "Zero-damage deliveries reported on 94% of moves this year",
-  "You get one coordinator. One quote. No runaround.",
-  "Live support from real humans — not just AI",
-  "Licensed carriers. Verified movers. Flat-rate protection."
+  // 🟦 Trust & Professionalism
+  { icon: "🙋", text: "Live support from real humans — not just AI" },
+  { icon: "🔒", text: "Licensed carriers. Verified movers. Protected quotes." },
+  { icon: "🧠", text: "Every quote is reviewed by a human" },
+  { icon: "🔧", text: "We specialize in long-distance logistics" },
+  { icon: "🗂️", text: "One point of contact from quote to delivery" },
+  { icon: "📞", text: "Phone support available before, during, and after your move" },
+  { icon: "🧼", text: "Clean, single-use materials for each move" },
+  { icon: "📦", text: "Extra protection available for TVs, artwork, and antiques" },
+  { icon: "📣", text: "Real people are booking every hour" },
+  { icon: "🚚", text: "Fleet-ready. Route-optimized. On time." }
 ];
 
-// Shuffle messages once per session
+// 🔁 Shuffle once per session
 function shuffleArray(array) {
   return [...array].sort(() => Math.random() - 0.5);
 }
 
 export default function LiveTrustStatus() {
-  const [shuffledMessages, setShuffledMessages] = useState([]);
+  const [shuffled, setShuffled] = useState([]);
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    setShuffledMessages(shuffleArray(TRUST_MESSAGES));
+    setShuffled(shuffleArray(TRUST_MESSAGES));
   }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setIndex(prev => (prev + 1) % shuffledMessages.length);
-    }, 8000); // 8 seconds per message
+      setIndex((prev) => (prev + 1) % shuffled.length);
+    }, 8000); // Rotate every 8 seconds
 
     return () => clearInterval(interval);
-  }, [shuffledMessages]);
+  }, [shuffled]);
 
-  if (!shuffledMessages.length) return null;
+  if (!shuffled.length) return null;
 
   return (
     <div style={styles.wrapper}>
-      {shuffledMessages[index]}
+      <span style={styles.icon}>{shuffled[index].icon}</span>
+      <span>{shuffled[index].text}</span>
     </div>
   );
 }
 
 const styles = {
   wrapper: {
-    textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '8px',
+    background: '#f8f8f8',
+    borderRadius: '6px',
+    padding: '6px 12px',
     fontSize: '13px',
-    color: '#555',
+    fontWeight: '500',
+    color: '#444',
+    minHeight: '28px',
+    textAlign: 'center',
     marginBottom: '8px',
-    minHeight: '20px',
-    transition: 'opacity 0.3s ease',
+  },
+  icon: {
+    fontSize: '15px',
   }
 };
