@@ -2,7 +2,7 @@ import Head from 'next/head';
 import Header from '../components/Header';
 import ChatUI from '../components/ChatUI';
 import Footer from '../components/Footer';
-import LiveTrustStatus from '../components/LiveTrustStatus';
+import LiveTrustStatus from '../components/LiveTrustStatus'; // ✅ NEW IMPORT
 
 export default function Home() {
   return (
@@ -22,7 +22,7 @@ export default function Home() {
         <meta name="twitter:description" content="We handle your move with care, protection, and a single point of contact." />
         <meta name="twitter:image" content="https://trustmovingco.com/Og-image.png" />
 
-        {/* ✅ Google Analytics */}
+        {/* ✅ Google Analytics (GA4) */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-JC5ZTSZED2"></script>
         <script
           dangerouslySetInnerHTML={{
@@ -35,7 +35,7 @@ export default function Home() {
           }}
         />
 
-        {/* ✅ Google Ads */}
+        {/* ✅ Google Ads conversion tracking (AW tag) */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17246682774"></script>
         <script
           dangerouslySetInnerHTML={{
@@ -48,7 +48,7 @@ export default function Home() {
           }}
         />
 
-        {/* ✅ Hotjar */}
+        {/* ✅ Hotjar Tracking */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -68,9 +68,12 @@ export default function Home() {
       <div style={styles.page}>
         <Header />
 
-        {/* ✅ Chat + Trust Status Container */}
-        <div style={styles.chatModule}>
+        {/* ✅ ORIGINAL TRUST STATUS PLACEMENT */}
+        <div style={styles.trustStatusWrapper}>
           <LiveTrustStatus />
+        </div>
+
+        <div style={styles.chatContainer}>
           <ChatUI />
         </div>
 
@@ -85,23 +88,22 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     height: '100dvh',
-    backgroundColor: '#f0f2f5', // slight gray backdrop
+    backgroundColor: '#fff',
     overflow: 'hidden',
   },
-  chatModule: {
-    maxWidth: '620px',
-    width: '100%',
-    margin: '0 auto',
-    background: '#fff',
-    borderRadius: '12px',
-    boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
-    padding: '20px',
-    marginTop: '16px',
-    marginBottom: '24px',
+  trustStatusWrapper: {
+    textAlign: 'center',
+    paddingTop: '8px',
+    paddingBottom: '4px',
+    fontSize: '13px',
+    color: '#555',
+    minHeight: '20px'
+  },
+  chatContainer: {
+    flexGrow: 1,
     display: 'flex',
     flexDirection: 'column',
-    gap: '8px',
-    flexGrow: 1,
+    overflow: 'hidden',
     minHeight: 0,
   },
 };
