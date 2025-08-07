@@ -54,7 +54,7 @@ export default function LiveTrustStatus() {
   if (!shuffled.length) return null;
 
   return (
-    <div style={styles.wrapper}>
+    <div style={{ ...styles.wrapper, ...styles.fade }}>
       <span style={styles.icon}>{shuffled[index].icon}</span>
       <span style={styles.text}>{shuffled[index].text}</span>
     </div>
@@ -67,25 +67,30 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     gap: '10px',
-    fontFamily: '"Inter", sans-serif',
     fontSize: '17px',
     fontWeight: 500,
+    fontFamily: '"Inter", sans-serif',
     color: '#222',
-    padding: '10px 20px',
-    margin: '0 auto',               // 🔧 removed top/bottom spacing
-    maxWidth: '95%',
-    background: 'rgba(255, 255, 255, 0.7)',
+    padding: '10px 18px',
+    margin: '4px auto 0',
+    maxWidth: '96%',
+    background: 'rgba(240, 240, 240, 0.7)', // very light grey with slight opacity
     borderRadius: '10px',
-    boxShadow: '0 1px 6px rgba(0, 0, 0, 0.08)',
-    backdropFilter: 'blur(4px)',
-    textAlign: 'center',
+    border: '1px solid rgba(0, 0, 0, 0.04)',
+    backdropFilter: 'blur(5px)',
+    boxShadow: '0 1px 5px rgba(0, 0, 0, 0.04)',
+    transition: 'opacity 0.6s ease-in-out',
     minHeight: '38px',
+    textAlign: 'center',
   },
   icon: {
     fontSize: '18px',
     marginTop: '-1px',
   },
   text: {
-    lineHeight: '1.6',
+    lineHeight: '1.4',
+  },
+  fade: {
+    animation: 'fadeInOut 8s infinite',
   },
 };
