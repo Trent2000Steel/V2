@@ -42,6 +42,7 @@ function shuffleArray(array) {
 export default function LiveTrustStatus() {
   const [shuffled, setShuffled] = useState([]);
   const [index, setIndex] = useState(0);
+  const [fade, setFade] = useState(true);
 
   useEffect(() => {
     setShuffled(shuffleArray(TRUST_MESSAGES));
@@ -49,7 +50,11 @@ export default function LiveTrustStatus() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setIndex((prev) => (prev + 1) % shuffled.length);
+      setFade(false);
+      setTimeout(() => {
+        setIndex((prev) => (prev + 1) % shuffled.length);
+        setFade(true);
+      }, 400); // Fade out before switching
     }, 8000); // Rotate every 8 seconds
 
     return () => clearInterval(interval);
@@ -59,8 +64,10 @@ export default function LiveTrustStatus() {
 
   return (
     <div style={styles.wrapper}>
-      <span style={styles.icon}>{shuffled[index].icon}</span>
-      <span>{shuffled[index].text}</span>
+      <div style={{ ...styles.message, opacity: fade ? 1 : 0 }}>
+        <span style={styles.icon}>{shuffled[index].icon}</span>
+        <span style={styles.text}>{shuffled[index].text}</span>
+      </div>
     </div>
   );
 }
@@ -68,20 +75,30 @@ export default function LiveTrustStatus() {
 const styles = {
   wrapper: {
     display: 'flex',
-    alignItems: 'center',
     justifyContent: 'center',
-    gap: '8px',
-    background: '#f0f7ff', // 🔵 subtle blue background for trust
-    borderRadius: '6px',
-    padding: '8px 14px',
-    fontSize: '15px', // ⬆️ Increased for legibility
-    fontWeight: '500',
-    color: '#333',
-    minHeight: '32px',
-    textAlign: 'center',
-    lineHeight: '1.4',
+    alignItems: 'center',
+    background: '#eaeaea', // ✅ Neutral grey
+    padding: '10px 18px',
+    borderRadius: '8px',
+    border: '1px solid #ccc',
+    margin: '0 auto',
+    maxWidth: '480px',
+    minHeight: '40px',
+    transition: 'all 0.3s ease-in-out',
+  },
+  message: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
+    transition: 'opacity 0.4s ease-in-out',
   },
   icon: {
+    fontSize: '18px',
+  },
+  text: {
     fontSize: '16px',
+    fontWeight: '600',
+    color: '#222',
+    lineHeight: '1.4',
   }
 };
