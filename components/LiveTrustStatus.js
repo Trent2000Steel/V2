@@ -49,8 +49,7 @@ export default function LiveTrustStatus() {
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % shuffled.length);
-    }, 8000);
-
+    }, 8000); // 8 seconds per rotation
     return () => clearInterval(interval);
   }, [shuffled]);
 
@@ -70,13 +69,14 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     gap: '10px',
-    fontSize: '15.5px',
-    fontWeight: 600,
+    fontFamily: '"Inter", sans-serif',
+    fontSize: '17px',
+    fontWeight: 500,
     color: '#222',
     padding: '10px 20px',
     margin: '6px auto 0',
     maxWidth: '95%',
-    background: 'rgba(255, 255, 255, 0.7)', // ✨ Glassy white
+    background: 'rgba(255, 255, 255, 0.7)',
     borderRadius: '10px',
     boxShadow: '0 1px 6px rgba(0, 0, 0, 0.08)',
     transition: 'opacity 0.6s ease-in-out',
@@ -89,7 +89,7 @@ const styles = {
     marginTop: '-1px',
   },
   text: {
-    lineHeight: '1.4',
+    lineHeight: '1.6',
   },
   fade: {
     animation: 'fadeInOut 8s infinite',
