@@ -33,7 +33,7 @@ const TRUST_MESSAGES = [
   "Fleet-ready. Route-optimized. On time.",
 ];
 
-// Shuffle once per session
+// 🔁 Shuffle once per session
 function shuffleArray(array) {
   return [...array].sort(() => Math.random() - 0.5);
 }
@@ -71,8 +71,8 @@ const styles = {
     fontFamily: '"Inter", sans-serif',
     fontSize: '17px',
     fontWeight: 500,
-    color: '#222',
-    padding: '6px 14px',
+    color: '#444', // dark grey for a softer, more premium look
+    padding: '2px 14px 6px', // tighter spacing under logo
     margin: '0 auto 4px',
     maxWidth: '96%',
     background: '#fff',
@@ -89,5 +89,5 @@ const styles = {
   },
   fade: {
     animation: 'fadeInOut 8s infinite',
-  },
+  }
 };
