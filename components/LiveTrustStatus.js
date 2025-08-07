@@ -29,7 +29,6 @@ const TRUST_MESSAGES = [
   { icon: "🗂️", text: "One point of contact from quote to delivery" },
   { icon: "📞", text: "Phone support available before, during, and after your move" },
   { icon: "🧼", text: "Clean, single-use materials for each move" },
-  { icon: "📦", text: "Extra protection available for TVs, artwork, and antiques" },
   { icon: "📣", text: "Real people are booking every hour" },
   { icon: "🚚", text: "Fleet-ready. Route-optimized. On time." }
 ];
@@ -42,7 +41,6 @@ function shuffleArray(array) {
 export default function LiveTrustStatus() {
   const [shuffled, setShuffled] = useState([]);
   const [index, setIndex] = useState(0);
-  const [fade, setFade] = useState(true);
 
   useEffect(() => {
     setShuffled(shuffleArray(TRUST_MESSAGES));
@@ -50,12 +48,8 @@ export default function LiveTrustStatus() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setFade(false);
-      setTimeout(() => {
-        setIndex((prev) => (prev + 1) % shuffled.length);
-        setFade(true);
-      }, 400); // Fade out before switching
-    }, 8000); // Rotate every 8 seconds
+      setIndex((prev) => (prev + 1) % shuffled.length);
+    }, 8000);
 
     return () => clearInterval(interval);
   }, [shuffled]);
@@ -63,11 +57,9 @@ export default function LiveTrustStatus() {
   if (!shuffled.length) return null;
 
   return (
-    <div style={styles.wrapper}>
-      <div style={{ ...styles.message, opacity: fade ? 1 : 0 }}>
-        <span style={styles.icon}>{shuffled[index].icon}</span>
-        <span style={styles.text}>{shuffled[index].text}</span>
-      </div>
+    <div style={{ ...styles.wrapper, ...styles.fade }}>
+      <span style={styles.icon}>{shuffled[index].icon}</span>
+      <span style={styles.text}>{shuffled[index].text}</span>
     </div>
   );
 }
@@ -75,30 +67,31 @@ export default function LiveTrustStatus() {
 const styles = {
   wrapper: {
     display: 'flex',
+    alignItems: 'center',
     justifyContent: 'center',
-    alignItems: 'center',
-    background: '#eaeaea', // ✅ Neutral grey
-    padding: '10px 18px',
-    borderRadius: '8px',
-    border: '1px solid #ccc',
-    margin: '0 auto',
-    maxWidth: '480px',
-    minHeight: '40px',
-    transition: 'all 0.3s ease-in-out',
-  },
-  message: {
-    display: 'flex',
-    alignItems: 'center',
     gap: '10px',
-    transition: 'opacity 0.4s ease-in-out',
+    fontSize: '15.5px',
+    fontWeight: 600,
+    color: '#222',
+    padding: '10px 20px',
+    margin: '6px auto 0',
+    maxWidth: '95%',
+    background: 'rgba(255, 255, 255, 0.7)', // ✨ Glassy white
+    borderRadius: '10px',
+    boxShadow: '0 1px 6px rgba(0, 0, 0, 0.08)',
+    transition: 'opacity 0.6s ease-in-out',
+    minHeight: '38px',
+    backdropFilter: 'blur(4px)',
+    textAlign: 'center',
   },
   icon: {
     fontSize: '18px',
+    marginTop: '-1px',
   },
   text: {
-    fontSize: '16px',
-    fontWeight: '600',
-    color: '#222',
     lineHeight: '1.4',
+  },
+  fade: {
+    animation: 'fadeInOut 8s infinite',
   }
 };
