@@ -29,7 +29,6 @@ const TRUST_MESSAGES = [
   "Weekend slots go first — ask about weekdays",
   "High-demand routes are closing out early",
   "Most customers reserve their move within 48 hours of quoting",
-  "A delay of one day can affect your preferred delivery window",
   "Preferred pickup windows book out 7–14 days in advance",
 
   // ⭐ Reviews / Confidence
