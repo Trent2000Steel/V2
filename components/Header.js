@@ -12,18 +12,19 @@ export default function Header() {
 
 const styles = {
   header: {
-    height: '92px',
+    height: '80px', // ⬅️ Reduced from 92px
     backgroundColor: '#ffffff',
-    borderBottom: '1px solid #e0e0e0',
+    borderBottom: 'none', // ⬅️ Removed the line
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     position: 'sticky',
     top: 0,
     zIndex: 1000,
+    paddingBottom: '4px', // ⬅️ Small tweak to bring it closer to trust text
   },
   logoImg: {
-    height: '64px',
+    height: '60px', // ⬅️ Slightly reduced
     objectFit: 'contain',
     userSelect: 'none',
   }
