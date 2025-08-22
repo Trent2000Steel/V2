@@ -12,19 +12,18 @@ export default function Header() {
 
 const styles = {
   header: {
-    height: '80px',              // ⬆️ Taller header to fit larger logo
-    backgroundColor: '#ffffff',  // ✅ White background
+    height: '84px',
+    backgroundColor: '#ffffff',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'flex-start', // ⬅️ Logo sticks to the left
+    justifyContent: 'center', // ✅ centered logo
     position: 'sticky',
     top: 0,
     zIndex: 1000,
-    padding: '0 20px',           // ⬇️ Small side padding
-    borderBottom: '1px solid #eee' // ✅ Optional subtle divider
+    borderBottom: '1px solid #eee'
   },
   logoImg: {
-    height: '64px',              // ⬆️ Increased logo size
+    height: '72px', // ✅ slightly larger logo
     objectFit: 'contain',
     userSelect: 'none',
   }
