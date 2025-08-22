@@ -12,7 +12,7 @@ export default function Header() {
 
 const styles = {
   header: {
-    height: '64px',              // ⬇️ Tight header height
+    height: '80px',              // ⬆️ Taller header to fit larger logo
     backgroundColor: '#ffffff',  // ✅ White background
     display: 'flex',
     alignItems: 'center',
@@ -20,11 +20,11 @@ const styles = {
     position: 'sticky',
     top: 0,
     zIndex: 1000,
-    padding: '0 16px',           // ⬇️ Small left/right padding
+    padding: '0 20px',           // ⬇️ Small side padding
     borderBottom: '1px solid #eee' // ✅ Optional subtle divider
   },
   logoImg: {
-    height: '48px',              // ⬇️ Fits well in header
+    height: '64px',              // ⬆️ Increased logo size
     objectFit: 'contain',
     userSelect: 'none',
   }
