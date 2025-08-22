@@ -8,18 +8,31 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>MovingCo — Moving You Can Trust</title>
-        <meta name="description" content="Flat Rate Pricing. No Money Down. Real Human Help." />
+        <title>TruestMove - Total Move Control</title>
+        <meta
+          name="description"
+          content="TruestMove is America’s trusted moving concierge. Total Move Control with the MoveSafe Method™ and real human oversight from start to finish."
+        />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" type="image/png" href="/Favicon.png" />
-        <meta property="og:title" content="MovingCo — Moving You Can Trust" />
-        <meta property="og:description" content="Flat-rate long-distance moves with real people watching your stuff. Seriously." />
+
+        {/* Open Graph (Facebook, LinkedIn, etc.) */}
+        <meta property="og:title" content="TruestMove - Total Move Control" />
+        <meta
+          property="og:description"
+          content="TruestMove is America’s trusted moving concierge. Experience the MoveSafe Method™ and real human oversight at every step."
+        />
         <meta property="og:image" content="https://trustmovingco.com/Og-image.png" />
         <meta property="og:url" content="https://trustmovingco.com" />
         <meta property="og:type" content="website" />
+
+        {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="MovingCo — Moving You Can Trust" />
-        <meta name="twitter:description" content="We handle your move with care, protection, and a single point of contact." />
+        <meta name="twitter:title" content="TruestMove - Total Move Control" />
+        <meta
+          name="twitter:description"
+          content="America’s trusted moving concierge. The MoveSafe Method™ with human oversight for total move control."
+        />
         <meta name="twitter:image" content="https://trustmovingco.com/Og-image.png" />
 
         {/* ✅ Google Analytics (GA4) */}
