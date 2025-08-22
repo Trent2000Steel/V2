@@ -12,18 +12,18 @@ export default function Header() {
 
 const styles = {
   header: {
-    height: '84px',
+    height: '72px',            // ⬇️ Reduced overall height
     backgroundColor: '#ffffff',
     display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center', // ✅ centered logo
+    alignItems: 'center',      // keeps logo centered vertically
+    justifyContent: 'center',  // centers horizontally
     position: 'sticky',
     top: 0,
     zIndex: 1000,
     borderBottom: '1px solid #eee'
   },
   logoImg: {
-    height: '72px', // ✅ slightly larger logo
+    height: '64px',            // ⬆️ logo almost fills header
     objectFit: 'contain',
     userSelect: 'none',
   }
