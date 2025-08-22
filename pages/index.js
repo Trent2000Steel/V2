@@ -2,7 +2,6 @@ import Head from 'next/head';
 import Header from '../components/Header';
 import ChatUI from '../components/ChatUI';
 import Footer from '../components/Footer';
-import LiveTrustStatus from '../components/LiveTrustStatus'; // ✅ NEW IMPORT
 
 export default function Home() {
   return (
