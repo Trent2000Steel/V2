@@ -80,11 +80,6 @@ export default function Home() {
       <div style={styles.page}>
         <Header />
 
-        {/* ✅ ORIGINAL TRUST STATUS PLACEMENT */}
-        <div style={styles.trustStatusWrapper}>
-          <LiveTrustStatus />
-        </div>
-
         <div style={styles.chatContainer}>
           <ChatUI />
         </div>
@@ -102,14 +97,6 @@ const styles = {
     height: '100dvh',
     backgroundColor: '#fff',
     overflow: 'hidden',
-  },
-  trustStatusWrapper: {
-    textAlign: 'center',
-    paddingTop: '8px',
-    paddingBottom: '4px',
-    fontSize: '13px',
-    color: '#555',
-    minHeight: '20px'
   },
   chatContainer: {
     flexGrow: 1,
